@@ -1,13 +1,11 @@
 package com.example.socialmedia.Activities;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +20,8 @@ import com.example.socialmedia.Utils.LoginSessionUtil;
 public class LoginActivity extends AppCompatActivity {
 
     private static final int NEW_USER_RESULT = 1;
-    private final Context CONTEXT = LoginActivity.this;
+
+    private final Context context = LoginActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CONTEXT, RegisterUserActivity.class);
+                Intent intent = new Intent(context, RegisterUserActivity.class);
                 startActivityForResult(intent, NEW_USER_RESULT);
             }
         });
@@ -66,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                LoginSessionUtil.setLogin(CONTEXT, true);
+                LoginSessionUtil.setLogin(context, true);
                 GoToMainActivity();
             }
         });
@@ -86,24 +85,29 @@ public class LoginActivity extends AppCompatActivity {
 
         CurrentUser user = new CurrentUser(login, name, password, pathImgProfile);
 
-        LoginSessionUtil.setCurrentUserInfo(CONTEXT, user);
+        LoginSessionUtil.setCurrentUserInfo(context, user);
     }
 
     private boolean ValidateUserLogin(String login, String password) {
-        CurrentUser user = LoginSessionUtil.getCurrentInfo(CONTEXT);
+        if (login.isEmpty() || password.isEmpty()) {
+            AlertMessageUtil.defaultAlert(context, "Campos de Login e Senha são requeridos!");
+            return false;
+        }
+
+        CurrentUser user = LoginSessionUtil.getCurrentInfo(context);
 
         if (user.login.equals(login) && user.password.equals(password)) {
             return true;
         }
 
-        AlertMessageUtil.defaultAlert(CONTEXT, "Login ou Senha incorretos!");
+        AlertMessageUtil.defaultAlert(context, "Login ou Senha incorretos!");
 
         return false;
     }
 
     private void GoToMainActivity() {
-        if (LoginSessionUtil.isLogged(CONTEXT)) {
-            Intent intent = new Intent(CONTEXT, MainActivity.class);
+        if (LoginSessionUtil.isLogged(context)) {
+            Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);
         }
     }

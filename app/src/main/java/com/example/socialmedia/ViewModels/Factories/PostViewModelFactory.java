@@ -10,7 +10,7 @@ import com.example.socialmedia.ViewModels.PostViewModel;
 
 public class PostViewModelFactory implements ViewModelProvider.Factory {
 
-    private Resources resources;
+    private final Resources resources;
 
     public PostViewModelFactory(Resources resources) {
         this.resources = resources;

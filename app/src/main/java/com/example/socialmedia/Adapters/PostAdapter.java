@@ -19,7 +19,7 @@ import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
-    private List<Post> posts;
+    private final List<Post> posts;
 
     public PostAdapter(List<Post> posts) {
         this.posts = posts;

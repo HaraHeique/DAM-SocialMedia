@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PostViewModel extends ViewModel {
-    private List<Post> postsList;
+    private final List<Post> postsList;
 
     public PostViewModel(Resources resources) {
         this.postsList = mockData(resources);

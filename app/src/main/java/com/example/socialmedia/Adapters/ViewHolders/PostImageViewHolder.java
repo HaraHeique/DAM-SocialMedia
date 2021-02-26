@@ -9,6 +9,7 @@ import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
 
 public class PostImageViewHolder extends PostViewHolder {
+
     private final ImageView postImageIv;
 
     public PostImageViewHolder(@NonNull View itemView) {

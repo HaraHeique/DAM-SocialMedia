@@ -19,11 +19,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -32,22 +30,18 @@ import com.example.socialmedia.Utils.AlertMessageUtil;
 import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
 import com.example.socialmedia.Utils.LayoutUtil;
-import com.example.socialmedia.Utils.LoginSessionUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class RegisterUserActivity extends AppCompatActivity {
 
     private static final int RESULT_TAKE_PICTURE = 1;
     private static final int RESULT_REQUEST_PERMISSION = 20;
-    private final Context CONTEXT = RegisterUserActivity.this;
+
+    private final Context context = RegisterUserActivity.this;
 
     private String currentPhotoPath;
 
@@ -113,13 +107,13 @@ public class RegisterUserActivity extends AppCompatActivity {
         try {
             file = createImageFile();
         } catch (IOException e) {
-            Toast.makeText(CONTEXT, "Não foi possível criar o arquivo", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Não foi possível criar o arquivo", Toast.LENGTH_LONG).show();
             return;
         }
 
         currentPhotoPath = file.getAbsolutePath();
         String authority = this.getApplicationContext().getPackageName() + ".provider";
-        Uri fUri = FileProvider.getUriForFile(CONTEXT, authority, file);
+        Uri fUri = FileProvider.getUriForFile(context, authority, file);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fUri);
         startActivityForResult(intent, RESULT_TAKE_PICTURE);
     }
@@ -151,7 +145,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     // Validações do form de cadastro //
     private boolean ValidateLogin(String value) {
         if (value.length() < 4) {
-            AlertMessageUtil.defaultAlert(CONTEXT, "Login deve conter no mínimo 4 caracteres.");
+            AlertMessageUtil.defaultAlert(context, "Login deve conter no mínimo 4 caracteres.");
             return false;
         }
 
@@ -160,7 +154,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     private boolean ValidatePassword(String value) {
         if (value.length() < 6) {
-            AlertMessageUtil.defaultAlert(CONTEXT, "Senha deve conter no mínimo 6 caracteres.");
+            AlertMessageUtil.defaultAlert(context, "Senha deve conter no mínimo 6 caracteres.");
             return false;
         }
 
@@ -169,7 +163,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     private boolean ValidateConfirmPassword(String password, String confirmPassword) {
         if (!password.equals(confirmPassword)) {
-            AlertMessageUtil.defaultAlert(CONTEXT, "Confirmação de senha deve ser igual a senha.");
+            AlertMessageUtil.defaultAlert(context, "Confirmação de senha deve ser igual a senha.");
             return false;
         }
 
@@ -178,7 +172,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     private boolean ValidateName(String name) {
         if (name.length() < 6) {
-            AlertMessageUtil.defaultAlert(CONTEXT, "Nome completo deve conter no mínimo 6 caracteres.");
+            AlertMessageUtil.defaultAlert(context, "Nome completo deve conter no mínimo 6 caracteres.");
             return false;
         }
 
@@ -187,7 +181,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     private boolean ValidateBornDate(String date) {
         if (DateTimeUtil.ConvertToDate(date) == null) {
-            AlertMessageUtil.defaultAlert(CONTEXT, "Data deve ser no formato dd/MM/yyyy");
+            AlertMessageUtil.defaultAlert(context, "Data deve ser no formato dd/MM/yyyy");
             return false;
         }
 
@@ -196,7 +190,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     private boolean ValidateCity(String value) {
         if (value.length() < 4) {
-            AlertMessageUtil.defaultAlert(CONTEXT, "Cidade deve conter no mínimo 4 caracteres.");
+            AlertMessageUtil.defaultAlert(context, "Cidade deve conter no mínimo 4 caracteres.");
             return false;
         }
 
@@ -207,14 +201,14 @@ public class RegisterUserActivity extends AppCompatActivity {
         String message = "Deve conter uma foto válida de perfil.";
 
         if (pathImage == null || pathImage.isEmpty()) {
-            AlertMessageUtil.defaultAlert(CONTEXT, message);
+            AlertMessageUtil.defaultAlert(context, message);
             return false;
         }
 
         File file = new File(pathImage);
 
         if (file == null || !file.exists()) {
-            AlertMessageUtil.defaultAlert(CONTEXT, message);
+            AlertMessageUtil.defaultAlert(context, message);
             return false;
         }
 
@@ -243,7 +237,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
     private boolean hasPermission(String permission) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return ActivityCompat.checkSelfPermission(CONTEXT, permission) != PackageManager.PERMISSION_GRANTED;
+            return ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED;
         }
 
         return true;
@@ -267,7 +261,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         if (permissionsRejected.size() > 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
-                    new AlertDialog.Builder(CONTEXT)
+                    new AlertDialog.Builder(context)
                             .setMessage("Para utilizar este APP é preciso conceder essas permissões!")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override

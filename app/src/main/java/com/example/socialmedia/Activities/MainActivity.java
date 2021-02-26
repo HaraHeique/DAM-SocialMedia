@@ -3,7 +3,6 @@ package com.example.socialmedia.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,23 +14,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.socialmedia.Adapters.PostAdapter;
-import com.example.socialmedia.Enums.PostType;
-import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
-import com.example.socialmedia.Utils.ImageUtil;
 import com.example.socialmedia.Utils.LayoutUtil;
 import com.example.socialmedia.Utils.LoginSessionUtil;
 import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
 import com.example.socialmedia.ViewModels.PostViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class MainActivity extends AppCompatActivity {
 
     private static final int CREATE_POST_RESULT = 1;
-    private final Context CONTEXT = MainActivity.this;
+
+    private final Context context = MainActivity.this;
+
     private Menu menu;
     private PostViewModel postViewModel;
     private PostAdapter postAdapter;
@@ -55,13 +50,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        LoginSessionUtil.setLogin(CONTEXT, false);
-        Intent intent = new Intent(CONTEXT, LoginActivity.class);
+        LoginSessionUtil.setLogin(context, false);
+        Intent intent = new Intent(context, LoginActivity.class);
         startActivity(intent);
     }
 
     private void onClickIconAddNewPost() {
-        Intent intent = new Intent(CONTEXT, CreatePostActivity.class);
+        Intent intent = new Intent(context, CreatePostActivity.class);
         startActivityForResult(intent, CREATE_POST_RESULT);
     }
 
@@ -73,10 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupRecyclerPostList() {
         RecyclerView postRecycleList = findViewById(R.id.rv_posts);
         postRecycleList.setAdapter(postAdapter);
-        postRecycleList.setLayoutManager(new LinearLayoutManager(CONTEXT));
-        DividerItemDecoration decoration = new DividerItemDecoration(postRecycleList.getContext(), DividerItemDecoration.VERTICAL);
-        decoration.setDrawable(ImageUtil.getDrawable(getResources(), R.drawable.shape_line_divider));
-        postRecycleList.addItemDecoration(decoration);
+        postRecycleList.setLayoutManager(new LinearLayoutManager(context));
     }
 
     private void setVisibleMenu() {
@@ -95,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         MenuItem logoutMenuItem = menu.findItem(R.id.op_logout);
         MenuItem addPostMenuItem = menu.findItem(R.id.op_addpost);
 
-        if (LoginSessionUtil.isLogged(CONTEXT)) {
+        if (LoginSessionUtil.isLogged(context)) {
             LayoutUtil.showItemMenu(allWorldMenuItem);
             LayoutUtil.showItemMenu(myWorldMenuItem);
             LayoutUtil.showItemMenu(onlyMeMenuItem);
@@ -115,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkPermissionInPage() {
-        if (!LoginSessionUtil.isLogged(CONTEXT)) {
+        if (!LoginSessionUtil.isLogged(context)) {
             logout();
             return false;
         }
