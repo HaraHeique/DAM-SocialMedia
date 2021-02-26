@@ -13,6 +13,7 @@ import com.example.socialmedia.Utils.ImageUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PostViewModel extends ViewModel {
     private final List<Post> postsList;
@@ -23,6 +24,18 @@ public class PostViewModel extends ViewModel {
 
     public List<Post> getPostsList() {
         return this.postsList;
+    }
+
+    public List<Post> getPostsByLogin(String login) {
+        return this.postsList.stream()
+            .filter(p -> p.user.login.equals(login))
+            .collect(Collectors.toList());
+    }
+
+    public List<Post> getPostsByFollow(boolean following) {
+        return this.postsList.stream()
+            .filter(p -> p.user.following == following)
+            .collect(Collectors.toList());
     }
 
     private List<Post> mockData(Resources resources) {

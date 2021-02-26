@@ -19,7 +19,7 @@ import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
-    private final List<Post> posts;
+    private List<Post> posts;
 
     public PostAdapter(List<Post> posts) {
         this.posts = posts;
@@ -43,17 +43,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-        Post post = posts.get(position);
+        Post post = this.posts.get(position);
         holder.bind(post);
     }
 
     @Override
     public int getItemCount() {
-        return posts.size();
+        return this.posts.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return posts.get(position).type.ordinal();
+        return this.posts.get(position).type.ordinal();
+    }
+
+    public void updatePostList(List<Post> posts) {
+        this.posts = posts;
+        notifyDataSetChanged();
     }
 }

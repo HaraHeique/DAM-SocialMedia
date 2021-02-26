@@ -14,12 +14,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.socialmedia.Adapters.PostAdapter;
+import com.example.socialmedia.Models.CurrentUser;
+import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.LayoutUtil;
 import com.example.socialmedia.Utils.LoginSessionUtil;
 import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
 import com.example.socialmedia.ViewModels.PostViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setupPostViewModel();
         postAdapter = new PostAdapter(postViewModel.getPostsList());
         setupRecyclerPostList();
+        onClickIconsMenuFooter();
     }
 
     @Override
@@ -58,6 +63,35 @@ public class MainActivity extends AppCompatActivity {
     private void onClickIconAddNewPost() {
         Intent intent = new Intent(context, CreatePostActivity.class);
         startActivityForResult(intent, CREATE_POST_RESULT);
+    }
+
+    private void onClickIconsMenuFooter() {
+        BottomNavigationView btvPosts = findViewById(R.id.bnv_posts);
+
+        btvPosts.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.op_allworld) {
+                List<Post> allWordList = postViewModel.getPostsList();
+                postAdapter.updatePostList(allWordList);
+                return true;
+            }
+
+            if (itemId == R.id.op_myworld) {
+                List<Post> myWordList = postViewModel.getPostsByFollow(true);
+                postAdapter.updatePostList(myWordList);
+                return true;
+            }
+
+            if (itemId == R.id.op_onlyme) {
+                CurrentUser currentUser = LoginSessionUtil.getCurrentInfo(context);
+                List<Post> onlyMeList = postViewModel.getPostsByLogin(currentUser.login);
+                postAdapter.updatePostList(onlyMeList);
+                return true;
+            }
+
+            return false;
+        });
     }
 
     private void setupPostViewModel() {
