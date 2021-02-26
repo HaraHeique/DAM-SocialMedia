@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/op_allworld"
+        android:icon="@drawable/ic_all_world_24dp"
+        android:title="@string/op_allworld_title"
+        android:textStyle="bold"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/op_myworld"
+        android:icon="@drawable/ic_my_world_24dp"
+        android:title="@string/op_myworld_title"
+        android:textStyle="bold"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/op_onlyme"
+        android:icon="@drawable/ic_only_me_24dp"
+        android:title="@string/op_onlyme_title"
+        android:textStyle="bold"
+        app:showAsAction="ifRoom" />
+</menu>

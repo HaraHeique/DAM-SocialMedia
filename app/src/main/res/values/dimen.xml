@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="im_width">100dp</dimen>
+    <dimen name="im_height">100dp</dimen>
+    <dimen name="im_width_post">200dp</dimen>
+    <dimen name="im_height_post">200dp</dimen>
+    <dimen name="im_width_avatar">80dp</dimen>
+    <dimen name="im_height_avatar">80dp</dimen>
+    <dimen name="im_width_avatar_comment">50dp</dimen>
+    <dimen name="im_height_avatar_comment">50dp</dimen>
+</resources>

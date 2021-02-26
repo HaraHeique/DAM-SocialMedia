@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/op_addpost"
+        android:icon="@drawable/ic_baseline_add_24"
+        android:title="@string/op_addpost_title"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/op_login"
+        android:icon="@drawable/ic_baseline_login_24"
+        android:title="@string/op_login_title"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/op_logout"
+        android:icon="@drawable/ic_baseline_logout_24"
+        android:title="@string/op_logout_title"
+        app:showAsAction="ifRoom" />
+</menu>
