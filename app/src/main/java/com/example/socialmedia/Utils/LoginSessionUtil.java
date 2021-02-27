@@ -16,7 +16,7 @@ public final class LoginSessionUtil {
     public static CurrentUser getCurrentInfo(Context context) {
         SharedPreferences mPrefs = context.getSharedPreferences("currentUserInfo", 0);
 
-        return new CurrentUser(
+        CurrentUser currentUser = new CurrentUser(
             mPrefs.getString("login", ""),
             mPrefs.getString("name", ""),
             mPrefs.getString("bornDate", ""),
@@ -24,6 +24,9 @@ public final class LoginSessionUtil {
             mPrefs.getString("password", ""),
             mPrefs.getString("pathImgProfile", "")
         );
+        currentUser.isLogged = isLogged(context);
+
+        return currentUser;
     }
 
     public static void setLogin(Context context, boolean value) {

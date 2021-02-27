@@ -14,6 +14,7 @@ import com.example.socialmedia.Adapters.ViewHolders.PostViewHolder;
 import com.example.socialmedia.Enums.PostType;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
+import com.example.socialmedia.Utils.LoginSessionUtil;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+
         LayoutInflater inflater = LayoutInflater.from(context);
         PostType type = PostType.values()[viewType];
 

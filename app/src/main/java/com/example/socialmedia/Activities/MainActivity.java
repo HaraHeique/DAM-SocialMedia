@@ -49,6 +49,7 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        filterPostsByCurrentUser();
         setVisibleMenu();
     }
 
@@ -118,6 +119,7 @@ public class MainActivity extends BaseActivity {
         MenuItem loginMenuItem = menu.findItem(R.id.op_login);
         MenuItem logoutMenuItem = menu.findItem(R.id.op_logout);
         MenuItem addPostMenuItem = menu.findItem(R.id.op_addpost);
+        MenuItem friendsMenuItem = menu.findItem(R.id.op_friends);
 
         if (LoginSessionUtil.isLogged(context)) {
             showItemMenu(allWorldMenuItem);
@@ -127,14 +129,26 @@ public class MainActivity extends BaseActivity {
             hideItemMenu(loginMenuItem);
             showItemMenu(logoutMenuItem);
             showItemMenu(addPostMenuItem);
+            showItemMenu(friendsMenuItem);
         } else {
-            showItemMenu(allWorldMenuItem);
+            disableItemMenu(allWorldMenuItem);
             hideItemMenu(myWorldMenuItem);
             hideItemMenu(onlyMeMenuItem);
 
             showItemMenu(loginMenuItem);
             hideItemMenu(logoutMenuItem);
             hideItemMenu(addPostMenuItem);
+            hideItemMenu(friendsMenuItem);
+        }
+    }
+
+    private void filterPostsByCurrentUser() {
+        CurrentUser currentUser = LoginSessionUtil.getCurrentInfo(context);
+
+        if (!currentUser.isLogged) {
+            postAdapter.updatePostList(postViewModel.getPostsNotLogin(currentUser.login));
+        } else {
+            postAdapter.updatePostList(postViewModel.getPostsList());
         }
     }
 

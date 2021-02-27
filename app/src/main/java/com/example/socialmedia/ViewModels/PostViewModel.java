@@ -55,18 +55,22 @@ public class PostViewModel extends ViewModel {
         return result;
     }
 
+    // Queria utilizar stream(), mas não é possível para API < 24
+    public List<Post> getPostsNotLogin(String login) {
+        List<Post> result = new ArrayList<>();
+
+        for (Post post: postsList) {
+            if (!post.user.login.equals(login)) {
+                result.add(post);
+            }
+        }
+
+        return result;
+    }
+
     private List<Post> mockData(Context context) {
         Resources resources = context.getResources();
         CurrentUser currentUser = LoginSessionUtil.getCurrentInfo(context);
-
-        User usuarioLogado = new User(
-            currentUser.name,
-            currentUser.login,
-            DateTimeUtil.ConvertToDate(currentUser.bornDate),
-            currentUser.city,
-            true,
-            ImageUtil.getDrawable(currentUser.pathImgProfile)
-        );
 
         User usuarioJoaquin = new User(
             "Joaquin Phoenix",
@@ -127,25 +131,40 @@ public class PostViewModel extends ViewModel {
             usuarioAvatar
         );
 
-        Post post1usuariologado = new Post(
-            "Eu não sou o AVATAR!",
-            "Uns pensam que sou avatar porque sou careca. Mas não sou.",
-            null,
-            PostType.COMMENT,
-            usuarioLogado
-        );
+        if (currentUser.isLogged) {
+            User usuarioLogado = new User(
+                currentUser.name,
+                currentUser.login,
+                DateTimeUtil.ConvertToDate(currentUser.bornDate),
+                currentUser.city,
+                true,
+                ImageUtil.getDrawable(currentUser.pathImgProfile)
+            );
 
-        Post post2usuariologado = new Post(
-            "Galaxy!",
-            "Best place to live far away from humans problems!",
-            ImageUtil.getDrawable(resources, R.drawable.post2_usuariologado),
-            PostType.IMAGE,
-            usuarioLogado
-        );
+            Post post1usuariologado = new Post(
+                "Eu não sou o AVATAR!",
+                "Uns pensam que sou avatar porque sou careca. Mas não sou.",
+                null,
+                PostType.COMMENT,
+                usuarioLogado
+            );
+
+            Post post2usuariologado = new Post(
+                "Galaxy!",
+                "Best place to live far away from humans problems!",
+                ImageUtil.getDrawable(resources, R.drawable.post2_usuariologado),
+                PostType.IMAGE,
+                usuarioLogado
+            );
+
+            return Arrays.asList(
+                post1avatar, post1usuariologado, post1Joaquin, post1Joaquina, post2Joaquina,
+                post2usuariologado
+            );
+        }
 
         return Arrays.asList(
-            post1avatar, post1usuariologado, post1Joaquin, post1Joaquina, post2Joaquina,
-            post2usuariologado
+            post1avatar, post1Joaquin, post1Joaquina, post2Joaquina
         );
     }
 }
