@@ -1,6 +1,6 @@
 package com.example.socialmedia.Activities;
 
-import android.content.Context;
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,6 +21,7 @@ import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
 import com.example.socialmedia.ViewModels.PostViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
@@ -36,6 +37,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        askForPermissions(Collections.singletonList(Manifest.permission.CAMERA));
         setToolbarConfig(R.id.tb_main, "Timeline", false);
         setupPostViewModel();
         postAdapter = new PostAdapter(postViewModel.getPostsList());
@@ -91,7 +93,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setupPostViewModel() {
-        PostViewModelFactory postVMFactory = new PostViewModelFactory(getResources());
+        PostViewModelFactory postVMFactory = new PostViewModelFactory(context);
         postViewModel = new ViewModelProvider(this, postVMFactory).get(PostViewModel.class);
     }
 

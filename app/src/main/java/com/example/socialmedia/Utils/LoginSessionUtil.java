@@ -19,6 +19,8 @@ public final class LoginSessionUtil {
         return new CurrentUser(
             mPrefs.getString("login", ""),
             mPrefs.getString("name", ""),
+            mPrefs.getString("bornDate", ""),
+            mPrefs.getString("city", ""),
             mPrefs.getString("password", ""),
             mPrefs.getString("pathImgProfile", "")
         );
@@ -36,6 +38,8 @@ public final class LoginSessionUtil {
         mEditor.putString("password", user.password);
         mEditor.putString("name", user.name);
         mEditor.putString("login", user.login);
+        mEditor.putString("city", user.city);
+        mEditor.putString("bornDate", user.bornDate);
         mEditor.putString("pathImgProfile", user.pathImgProfile);
         mEditor.apply();
     }

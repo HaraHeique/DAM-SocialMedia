@@ -1,27 +1,18 @@
 package com.example.socialmedia.Activities;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.example.socialmedia.R;
@@ -31,13 +22,11 @@ import com.example.socialmedia.Utils.ImageUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RegisterUserActivity extends BaseActivity {
 
     private static final int RESULT_TAKE_PICTURE = 1;
-    private static final int RESULT_REQUEST_PERMISSION = 20;
+
 
     private String currentPhotoPath;
 
@@ -47,7 +36,6 @@ public class RegisterUserActivity extends BaseActivity {
         setContentView(R.layout.activity_register_user);
 
         setToolbarConfig(R.id.tb_register_user, "Novo Usuário", true);
-        checkPermissions();
         onClickPhotoPicker();
         onClickBtnConfirmRegisterUser();
     }
@@ -74,7 +62,9 @@ public class RegisterUserActivity extends BaseActivity {
             Intent intent = new Intent();
             intent.putExtra("name", name);
             intent.putExtra("login", login);
+            intent.putExtra ("bornDate", bornDate);
             intent.putExtra("password", password);
+            intent.putExtra("city", city);
             intent.putExtra("pathImgProfile", imageProfile);
             setResult(Activity.RESULT_OK, intent);
             finish();
@@ -201,66 +191,5 @@ public class RegisterUserActivity extends BaseActivity {
         }
 
         return true;
-    }
-
-    ////////// Permissão para acessar a CÂMERA /////////////
-    private void checkPermissions() {
-        List<String> permissions = new ArrayList<>();
-        permissions.add(Manifest.permission.CAMERA);
-
-        List<String> permissionNotGranted = new ArrayList<>();
-
-        for (String permission : permissions) {
-            if (hasPermission(permission)) {
-                permissionNotGranted.add(permission);
-            }
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (permissionNotGranted.size() > 0) {
-                requestPermissions(permissionNotGranted.toArray(new String[permissionNotGranted.size()]), RESULT_REQUEST_PERMISSION);
-            }
-        }
-    }
-
-    private boolean hasPermission(String permission) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED;
-        }
-
-        return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        List<String> permissionsRejected = new ArrayList<>();
-
-        if (requestCode == RESULT_REQUEST_PERMISSION) {
-            for (String permission : permissions) {
-                if (hasPermission(permission)) {
-                    permissionsRejected.add(permission);
-                }
-            }
-        }
-
-        // Pergunta por permissão novamente
-        if (permissionsRejected.size() > 0) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
-                    new AlertDialog.Builder(context)
-                            .setMessage("Para utilizar este APP é preciso conceder essas permissões!")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]), RESULT_REQUEST_PERMISSION);
-                                }
-                            })
-                            .create()
-                            .show();
-                }
-            }
-        }
     }
 }

@@ -68,11 +68,13 @@ public class LoginActivity extends BaseActivity {
         String pathImgProfile = data.getStringExtra("pathImgProfile");
         String name = data.getStringExtra("name");
         String login = data.getStringExtra("login");
+        String bornDate = data.getStringExtra("bornDate");
+        String city = data.getStringExtra("city");
 
         // Isto não é seguro, mas por enquanto não tem comunicação com o server deixar assim
         String password = data.getStringExtra("password");
 
-        CurrentUser user = new CurrentUser(login, name, password, pathImgProfile);
+        CurrentUser user = new CurrentUser(login, name, bornDate, city, password, pathImgProfile);
 
         LoginSessionUtil.setCurrentUserInfo(context, user);
     }

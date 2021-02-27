@@ -1,5 +1,6 @@
 package com.example.socialmedia.ViewModels.Factories;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
@@ -10,15 +11,15 @@ import com.example.socialmedia.ViewModels.PostViewModel;
 
 public class PostViewModelFactory implements ViewModelProvider.Factory {
 
-    private final Resources resources;
+    private final Context context;
 
-    public PostViewModelFactory(Resources resources) {
-        this.resources = resources;
+    public PostViewModelFactory(Context context) {
+        this.context = context;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new PostViewModel(resources);
+        return (T) new PostViewModel(this.context);
     }
 }

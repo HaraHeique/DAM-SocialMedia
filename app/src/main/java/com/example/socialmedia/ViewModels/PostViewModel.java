@@ -1,26 +1,28 @@
 package com.example.socialmedia.ViewModels;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 import androidx.lifecycle.ViewModel;
 
 import com.example.socialmedia.Enums.PostType;
+import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.Models.User;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
+import com.example.socialmedia.Utils.LoginSessionUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PostViewModel extends ViewModel {
     private final List<Post> postsList;
 
-    public PostViewModel(Resources resources) {
-        this.postsList = mockData(resources);
+    public PostViewModel(Context context) {
+        this.postsList = mockData(context);
     }
 
     public List<Post> getPostsList() {
@@ -53,7 +55,19 @@ public class PostViewModel extends ViewModel {
         return result;
     }
 
-    private List<Post> mockData(Resources resources) {
+    private List<Post> mockData(Context context) {
+        Resources resources = context.getResources();
+        CurrentUser currentUser = LoginSessionUtil.getCurrentInfo(context);
+
+        User usuarioLogado = new User(
+            currentUser.name,
+            currentUser.login,
+            DateTimeUtil.ConvertToDate(currentUser.bornDate),
+            currentUser.city,
+            true,
+            ImageUtil.getDrawable(currentUser.pathImgProfile)
+        );
+
         User usuarioJoaquin = new User(
             "Joaquin Phoenix",
             "joaquin123",
@@ -113,8 +127,25 @@ public class PostViewModel extends ViewModel {
             usuarioAvatar
         );
 
+        Post post1usuariologado = new Post(
+            "Eu não sou o AVATAR!",
+            "Uns pensam que sou avatar porque sou careca. Mas não sou.",
+            null,
+            PostType.COMMENT,
+            usuarioLogado
+        );
+
+        Post post2usuariologado = new Post(
+            "Galaxy!",
+            "Best place to live far away from humans problems!",
+            ImageUtil.getDrawable(resources, R.drawable.post2_usuariologado),
+            PostType.IMAGE,
+            usuarioLogado
+        );
+
         return Arrays.asList(
-            post1avatar, post1Joaquin, post1Joaquina, post2Joaquina
+            post1avatar, post1usuariologado, post1Joaquin, post1Joaquina, post2Joaquina,
+            post2usuariologado
         );
     }
 }
