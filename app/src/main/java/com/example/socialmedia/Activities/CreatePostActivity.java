@@ -1,19 +1,17 @@
 package com.example.socialmedia.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
 import android.os.Bundle;
 
 import com.example.socialmedia.R;
-import com.example.socialmedia.Utils.LayoutUtil;
 
-public class CreatePostActivity extends AppCompatActivity {
+public class CreatePostActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
-        LayoutUtil.setTitleActionBar(getSupportActionBar(), "Novo Post");
+        setToolbarConfig(R.id.tb_create_post, "Novo Post", true);
     }
 }

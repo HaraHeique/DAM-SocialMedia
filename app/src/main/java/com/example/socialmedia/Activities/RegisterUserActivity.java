@@ -1,12 +1,5 @@
 package com.example.socialmedia.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -25,23 +18,26 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
 import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
-import com.example.socialmedia.Utils.LayoutUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterUserActivity extends AppCompatActivity {
+public class RegisterUserActivity extends BaseActivity {
 
     private static final int RESULT_TAKE_PICTURE = 1;
     private static final int RESULT_REQUEST_PERMISSION = 20;
-
-    private final Context context = RegisterUserActivity.this;
 
     private String currentPhotoPath;
 
@@ -50,7 +46,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
 
-        LayoutUtil.setTitleActionBar(getSupportActionBar(), "Novo Usuário");
+        setToolbarConfig(R.id.tb_register_user, "Novo Usuário", true);
         checkPermissions();
         onClickPhotoPicker();
         onClickBtnConfirmRegisterUser();
@@ -59,44 +55,36 @@ public class RegisterUserActivity extends AppCompatActivity {
     private void onClickBtnConfirmRegisterUser() {
         Button btnConfirmRegister = findViewById(R.id.btn_newuser_confirm);
 
-        btnConfirmRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String login = ((EditText)findViewById(R.id.et_newuser_login)).getText().toString();
-                String password = ((EditText)findViewById(R.id.et_newuser_password)).getText().toString();
-                String confirmPassword = ((EditText)findViewById(R.id.et_newuser_confirmpassword)).getText().toString();
-                String name = ((EditText)findViewById(R.id.et_newuser_name)).getText().toString();
-                String bornDate = ((EditText)findViewById(R.id.et_newuser_borndate)).getText().toString();
-                String city = ((EditText)findViewById(R.id.et_newuser_city)).getText().toString();
-                String imageProfile = currentPhotoPath;
+        btnConfirmRegister.setOnClickListener(v -> {
+            String login = ((EditText)findViewById(R.id.et_newuser_login)).getText().toString();
+            String password = ((EditText)findViewById(R.id.et_newuser_password)).getText().toString();
+            String confirmPassword = ((EditText)findViewById(R.id.et_newuser_confirmpassword)).getText().toString();
+            String name = ((EditText)findViewById(R.id.et_newuser_name)).getText().toString();
+            String bornDate = ((EditText)findViewById(R.id.et_newuser_borndate)).getText().toString();
+            String city = ((EditText)findViewById(R.id.et_newuser_city)).getText().toString();
+            String imageProfile = currentPhotoPath;
 
-                if (!ValidateLogin(login) || !ValidatePassword(password) ||
-                    !ValidateConfirmPassword(password, confirmPassword) || !ValidateName(name) ||
-                    !ValidateBornDate(bornDate) || !ValidateCity(city) ||
-                    !ValidateImage(imageProfile)) {
-                    return;
-                }
-
-                Intent intent = new Intent();
-                intent.putExtra("name", name);
-                intent.putExtra("login", login);
-                intent.putExtra("password", password);
-                intent.putExtra("pathImgProfile", imageProfile);
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+            if (!ValidateLogin(login) || !ValidatePassword(password) ||
+                !ValidateConfirmPassword(password, confirmPassword) || !ValidateName(name) ||
+                !ValidateBornDate(bornDate) || !ValidateCity(city) ||
+                !ValidateImage(imageProfile)) {
+                return;
             }
+
+            Intent intent = new Intent();
+            intent.putExtra("name", name);
+            intent.putExtra("login", login);
+            intent.putExtra("password", password);
+            intent.putExtra("pathImgProfile", imageProfile);
+            setResult(Activity.RESULT_OK, intent);
+            finish();
         });
     }
 
     private void onClickPhotoPicker() {
         ImageView btnImg = findViewById(R.id.imv_newuser_imgprofile);
 
-        btnImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });
+        btnImg.setOnClickListener(v -> dispatchTakePictureIntent());
     }
 
     private void dispatchTakePictureIntent() {

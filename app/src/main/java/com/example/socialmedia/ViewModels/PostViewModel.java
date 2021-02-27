@@ -11,6 +11,7 @@ import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,16 +27,30 @@ public class PostViewModel extends ViewModel {
         return this.postsList;
     }
 
+    // Queria utilizar stream(), mas não é possível para API < 24
     public List<Post> getPostsByLogin(String login) {
-        return this.postsList.stream()
-            .filter(p -> p.user.login.equals(login))
-            .collect(Collectors.toList());
+        List<Post> result = new ArrayList<>();
+
+        for (Post post: postsList) {
+            if (post.user.login.equals(login)) {
+                result.add(post);
+            }
+        }
+
+        return result;
     }
 
+    // Queria utilizar stream(), mas não é possível para API < 24
     public List<Post> getPostsByFollow(boolean following) {
-        return this.postsList.stream()
-            .filter(p -> p.user.following == following)
-            .collect(Collectors.toList());
+        List<Post> result = new ArrayList<>();
+
+        for (Post post: postsList) {
+            if (post.user.following == following) {
+                result.add(post);
+            }
+        }
+
+        return result;
     }
 
     private List<Post> mockData(Resources resources) {

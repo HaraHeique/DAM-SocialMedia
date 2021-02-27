@@ -1,34 +1,29 @@
 package com.example.socialmedia.Activities;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.annotation.Nullable;
 
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
-import com.example.socialmedia.Utils.LayoutUtil;
 import com.example.socialmedia.Utils.LoginSessionUtil;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private static final int NEW_USER_RESULT = 1;
-
-    private final Context context = LoginActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        LayoutUtil.hideActionBar(getSupportActionBar());
+        hideActionBar();
         onBtnClickRegisterNewUser();
         onBtnClickLogin();
     }
@@ -43,31 +38,25 @@ public class LoginActivity extends AppCompatActivity {
     private void onBtnClickRegisterNewUser() {
         Button btnRegister = findViewById(R.id.btn_register);
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, RegisterUserActivity.class);
-                startActivityForResult(intent, NEW_USER_RESULT);
-            }
+        btnRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(context, RegisterUserActivity.class);
+            startActivityForResult(intent, NEW_USER_RESULT);
         });
     }
 
     private void onBtnClickLogin() {
         Button btnLogin = findViewById(R.id.btn_login);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String login = ((EditText)findViewById(R.id.et_login)).getText().toString();
-                String password = ((EditText)findViewById(R.id.et_password)).getText().toString();
+        btnLogin.setOnClickListener(v -> {
+            String login = ((EditText)findViewById(R.id.et_login)).getText().toString();
+            String password = ((EditText)findViewById(R.id.et_password)).getText().toString();
 
-                if (!ValidateUserLogin(login, password)) {
-                    return;
-                }
-
-                LoginSessionUtil.setLogin(context, true);
-                GoToMainActivity();
+            if (!ValidateUserLogin(login, password)) {
+                return;
             }
+
+            LoginSessionUtil.setLogin(context, true);
+            GoToMainActivity();
         });
     }
 

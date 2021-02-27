@@ -7,13 +7,24 @@
     android:contentDescription="@string/cd_img_createpost"
     tools:context=".Activities.CreatePostActivity">
 
-    <ScrollView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_create_post"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/tb_create_post">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,11 +56,11 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="8dp"
                 android:autofillHints=""
+                android:backgroundTint="@android:color/white"
                 android:ems="10"
                 android:hint="@string/hint_post_title"
                 android:inputType="textPersonName"
-                android:textColor="@color/white"
-                android:backgroundTint="@android:color/white"/>
+                android:textColor="@color/white" />
 
             <EditText
                 android:id="@+id/et_createpost_description"
@@ -62,12 +73,12 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="8dp"
                 android:autofillHints=""
+                android:backgroundTint="@android:color/white"
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="@string/hint_post_description"
                 android:inputType="textMultiLine"
-                android:textColor="@color/white"
-                android:backgroundTint="@android:color/white"/>
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btn_createpost_confirm"

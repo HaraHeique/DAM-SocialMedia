@@ -1,11 +1,5 @@
 package com.example.socialmedia.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,11 +7,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.socialmedia.Adapters.PostAdapter;
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
-import com.example.socialmedia.Utils.LayoutUtil;
 import com.example.socialmedia.Utils.LoginSessionUtil;
 import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
 import com.example.socialmedia.ViewModels.PostViewModel;
@@ -25,11 +23,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private static final int CREATE_POST_RESULT = 1;
-
-    private final Context context = MainActivity.this;
 
     private Menu menu;
     private PostViewModel postViewModel;
@@ -40,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LayoutUtil.setTitleActionBar(getSupportActionBar(), "Timeline");
+        setToolbarConfig(R.id.tb_main, "Timeline", false);
         setupPostViewModel();
         postAdapter = new PostAdapter(postViewModel.getPostsList());
         setupRecyclerPostList();
@@ -122,21 +118,21 @@ public class MainActivity extends AppCompatActivity {
         MenuItem addPostMenuItem = menu.findItem(R.id.op_addpost);
 
         if (LoginSessionUtil.isLogged(context)) {
-            LayoutUtil.showItemMenu(allWorldMenuItem);
-            LayoutUtil.showItemMenu(myWorldMenuItem);
-            LayoutUtil.showItemMenu(onlyMeMenuItem);
+            showItemMenu(allWorldMenuItem);
+            showItemMenu(myWorldMenuItem);
+            showItemMenu(onlyMeMenuItem);
 
-            LayoutUtil.hideItemMenu(loginMenuItem);
-            LayoutUtil.showItemMenu(logoutMenuItem);
-            LayoutUtil.showItemMenu(addPostMenuItem);
+            hideItemMenu(loginMenuItem);
+            showItemMenu(logoutMenuItem);
+            showItemMenu(addPostMenuItem);
         } else {
-            LayoutUtil.showItemMenu(allWorldMenuItem);
-            LayoutUtil.hideItemMenu(myWorldMenuItem);
-            LayoutUtil.hideItemMenu(onlyMeMenuItem);
+            showItemMenu(allWorldMenuItem);
+            hideItemMenu(myWorldMenuItem);
+            hideItemMenu(onlyMeMenuItem);
 
-            LayoutUtil.showItemMenu(loginMenuItem);
-            LayoutUtil.hideItemMenu(logoutMenuItem);
-            LayoutUtil.hideItemMenu(addPostMenuItem);
+            showItemMenu(loginMenuItem);
+            hideItemMenu(logoutMenuItem);
+            hideItemMenu(addPostMenuItem);
         }
     }
 

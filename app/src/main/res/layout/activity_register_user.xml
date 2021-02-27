@@ -8,11 +8,24 @@
     tools:context=".Activities.RegisterUserActivity"
     tools:visibility="visible">
 
-    <ScrollView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_register_user"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="33dp"
-        tools:layout_editor_absoluteY="509dp">
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_register_user">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,11 +43,11 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="8dp"
                 android:autofillHints=""
+                android:backgroundTint="@android:color/white"
                 android:ems="10"
                 android:hint="@string/hint_login"
                 android:inputType="textPersonName"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="@android:color/white"/>
+                android:textColor="#FFFFFF" />
 
 
             <EditText
@@ -47,11 +60,11 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="8dp"
                 android:autofillHints=""
+                android:backgroundTint="@android:color/white"
                 android:ems="10"
                 android:hint="@string/hint_password"
                 android:inputType="textPassword"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="@android:color/white"/>
+                android:textColor="#FFFFFF" />
 
             <EditText
                 android:id="@+id/et_newuser_confirmpassword"
@@ -63,11 +76,11 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="8dp"
                 android:autofillHints=""
+                android:backgroundTint="@android:color/white"
                 android:ems="10"
                 android:hint="@string/hint_confirm_password"
                 android:inputType="textPassword"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="@android:color/white"/>
+                android:textColor="#FFFFFF" />
 
             <EditText
                 android:id="@+id/et_newuser_name"
@@ -79,11 +92,11 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="8dp"
                 android:autofillHints=""
+                android:backgroundTint="@android:color/white"
                 android:ems="10"
                 android:hint="@string/hint_name_user"
                 android:inputType="textPersonName"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="@android:color/white"/>
+                android:textColor="#FFFFFF" />
 
             <EditText
                 android:id="@+id/et_newuser_borndate"
@@ -95,11 +108,11 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="8dp"
                 android:autofillHints=""
+                android:backgroundTint="@android:color/white"
                 android:ems="10"
                 android:hint="@string/hint_born_date"
                 android:inputType="date"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="@android:color/white"/>
+                android:textColor="#FFFFFF" />
 
             <EditText
                 android:id="@+id/et_newuser_city"
@@ -111,11 +124,11 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="8dp"
                 android:autofillHints=""
+                android:backgroundTint="@android:color/white"
                 android:ems="10"
                 android:hint="@string/hint_city"
                 android:inputType="textPersonName"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="@android:color/white"/>
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/tv_newuser_profiletitle"
