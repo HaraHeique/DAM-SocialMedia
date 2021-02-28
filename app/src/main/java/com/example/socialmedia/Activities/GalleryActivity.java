@@ -1,5 +1,6 @@
 package com.example.socialmedia.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -31,6 +32,12 @@ public class GalleryActivity extends BaseActivity {
         setupPostViewModel();
         setupGalleryAdapter();
         setupRecyclerGalleryGrid();
+    }
+
+    public void startPostImageActivity(int position) {
+        Intent intent = new Intent(context, PostImageActivity.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
     }
 
     private void setupPostViewModel() {

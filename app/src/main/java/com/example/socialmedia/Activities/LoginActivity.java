@@ -1,7 +1,6 @@
 package com.example.socialmedia.Activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -32,7 +31,7 @@ public class LoginActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        GoToMainActivity();
+        startMainActivity();
     }
 
     private void onBtnClickRegisterNewUser() {
@@ -51,16 +50,16 @@ public class LoginActivity extends BaseActivity {
             String login = ((EditText)findViewById(R.id.et_login)).getText().toString();
             String password = ((EditText)findViewById(R.id.et_password)).getText().toString();
 
-            if (!ValidateUserLogin(login, password)) {
+            if (!validateUserLogin(login, password)) {
                 return;
             }
 
             LoginSessionUtil.setLogin(context, true);
-            GoToMainActivity();
+            startMainActivity();
         });
     }
 
-    private void SetUserInfoLogin(Intent data) {
+    private void setUserInfoLogin(Intent data) {
         if (data == null) {
             return;
         }
@@ -79,7 +78,7 @@ public class LoginActivity extends BaseActivity {
         LoginSessionUtil.setCurrentUserInfo(context, user);
     }
 
-    private boolean ValidateUserLogin(String login, String password) {
+    private boolean validateUserLogin(String login, String password) {
         if (login.isEmpty() || password.isEmpty()) {
             AlertMessageUtil.defaultAlert(context, "Campos de Login e Senha são requeridos!");
             return false;
@@ -96,7 +95,7 @@ public class LoginActivity extends BaseActivity {
         return false;
     }
 
-    private void GoToMainActivity() {
+    private void startMainActivity() {
         if (LoginSessionUtil.isLogged(context)) {
             Intent intent = new Intent(context, MainActivity.class);
             startActivity(intent);
@@ -108,7 +107,7 @@ public class LoginActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_USER_RESULT && resultCode == Activity.RESULT_OK) {
-            SetUserInfoLogin(data);
+            setUserInfoLogin(data);
         }
     }
 }

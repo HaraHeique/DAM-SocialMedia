@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SocialMedia">
         <activity
+            android:name=".Activities.PostImageActivity"
+            android:parentActivityName=".Activities.GalleryActivity" />
+        <activity
             android:name=".Activities.GalleryActivity"
             android:parentActivityName=".Activities.MainActivity" />
         <activity

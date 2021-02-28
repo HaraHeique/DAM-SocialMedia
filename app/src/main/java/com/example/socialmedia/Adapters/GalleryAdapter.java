@@ -3,10 +3,13 @@ package com.example.socialmedia.Adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.socialmedia.Activities.GalleryActivity;
+import com.example.socialmedia.Activities.MainActivity;
 import com.example.socialmedia.Adapters.ViewHolders.GalleryViewHolder;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
@@ -34,10 +37,16 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         Post post = this.posts.get(position);
         holder.bind(post);
+        this.onClickPostImage(holder.itemView, position);
     }
 
     @Override
     public int getItemCount() {
         return this.posts.size();
+    }
+
+    private void onClickPostImage(View itemView, int position) {
+        ImageView imageView = itemView.findViewById(R.id.imv_gallery);
+        imageView.setOnClickListener(v -> ((GalleryActivity)v.getContext()).startPostImageActivity(position));
     }
 }
