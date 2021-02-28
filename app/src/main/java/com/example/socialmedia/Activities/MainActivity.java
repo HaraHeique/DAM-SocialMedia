@@ -28,7 +28,7 @@ public class MainActivity extends BaseActivity {
 
     private static final int CREATE_POST_RESULT = 1;
 
-    private Menu menu;
+    private Menu menuTop;
     private PostViewModel postViewModel;
     private PostAdapter postAdapter;
 
@@ -62,6 +62,11 @@ public class MainActivity extends BaseActivity {
     private void onClickIconAddNewPost() {
         Intent intent = new Intent(context, CreatePostActivity.class);
         startActivityForResult(intent, CREATE_POST_RESULT);
+    }
+
+    private void onClickIconFriends() {
+        Intent intent = new Intent(context, FriendActivity.class);
+        startActivity(intent);
     }
 
     private void onClickIconsMenuFooter() {
@@ -105,7 +110,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setVisibleMenu() {
-        if (menu == null) return;
+        if (menuTop == null) return;
 
         BottomNavigationView navigationView = findViewById(R.id.bnv_posts);
         Menu menuNav = navigationView.getMenu();
@@ -116,10 +121,10 @@ public class MainActivity extends BaseActivity {
         MenuItem onlyMeMenuItem = menuNav.findItem(R.id.op_onlyme);
 
         // Menu superior
-        MenuItem loginMenuItem = menu.findItem(R.id.op_login);
-        MenuItem logoutMenuItem = menu.findItem(R.id.op_logout);
-        MenuItem addPostMenuItem = menu.findItem(R.id.op_addpost);
-        MenuItem friendsMenuItem = menu.findItem(R.id.op_friends);
+        MenuItem loginMenuItem = menuTop.findItem(R.id.op_login);
+        MenuItem logoutMenuItem = menuTop.findItem(R.id.op_logout);
+        MenuItem addPostMenuItem = menuTop.findItem(R.id.op_addpost);
+        MenuItem friendsMenuItem = menuTop.findItem(R.id.op_friends);
 
         if (LoginSessionUtil.isLogged(context)) {
             showItemMenu(allWorldMenuItem);
@@ -164,7 +169,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        this.menu = menu;
+        menuTop = menu;
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_nav_top, menu);
@@ -183,6 +188,10 @@ public class MainActivity extends BaseActivity {
 
         if (itemId == R.id.op_addpost) {
             onClickIconAddNewPost();
+        }
+
+        if (itemId == R.id.op_friends) {
+            onClickIconFriends();
         }
 
         return super.onOptionsItemSelected(item);

@@ -18,8 +18,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SocialMedia">
-        <activity android:name=".Activities.CreatePostActivity" android:parentActivityName=".Activities.MainActivity" />
-        <activity android:name=".Activities.RegisterUserActivity" android:parentActivityName=".Activities.LoginActivity" />
+        <activity
+            android:name=".Activities.FriendActivity"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.CreatePostActivity"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.RegisterUserActivity"
+            android:parentActivityName=".Activities.LoginActivity" />
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.MainActivity">
             <intent-filter>

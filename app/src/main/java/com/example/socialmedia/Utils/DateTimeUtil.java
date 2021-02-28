@@ -3,6 +3,7 @@ package com.example.socialmedia.Utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public final class DateTimeUtil {
@@ -41,5 +42,26 @@ public final class DateTimeUtil {
 
     public static String ConvertToStrDate(Date date) {
         return defaultDateFormatter.format(date);
+    }
+
+    public static Calendar getCalendar(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        return cal;
+    }
+
+    public static int getDiffYears(Date first, Date last) {
+        Calendar a = getCalendar(first);
+        Calendar b = getCalendar(last);
+
+        int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
+
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) ||
+            (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+            diff--;
+        }
+
+        return diff;
     }
 }

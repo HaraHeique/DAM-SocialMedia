@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PostViewModel extends ViewModel {
+
     private final List<Post> postsList;
 
     public PostViewModel(Context context) {

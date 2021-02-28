@@ -1,7 +1,6 @@
 package com.example.socialmedia.ViewModels.Factories;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
