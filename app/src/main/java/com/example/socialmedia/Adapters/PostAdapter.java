@@ -4,17 +4,18 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.socialmedia.Activities.MainActivity;
 import com.example.socialmedia.Adapters.ViewHolders.PostCommentViewHolder;
 import com.example.socialmedia.Adapters.ViewHolders.PostImageViewHolder;
 import com.example.socialmedia.Adapters.ViewHolders.PostViewHolder;
 import com.example.socialmedia.Enums.PostType;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
-import com.example.socialmedia.Utils.LoginSessionUtil;
 
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post post = this.posts.get(position);
         holder.bind(post);
+        this.onClickBtnComment(holder.itemView, position);
     }
 
     @Override
@@ -61,5 +63,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     public void updatePostList(List<Post> posts) {
         this.posts = posts;
         notifyDataSetChanged();
+    }
+
+    private void onClickBtnComment(View itemView, int position) {
+        ImageView btnComment = itemView.findViewById(R.id.imv_timeline_comment);
+        btnComment.setOnClickListener(v -> ((MainActivity)v.getContext()).startCommentActivity(this.posts.get(position)));
     }
 }

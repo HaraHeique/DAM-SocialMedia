@@ -12,6 +12,7 @@
     <string name="hint_city">Cidade</string>
     <string name="hint_post_title">Título</string>
     <string name="hint_post_description">Descrição</string>
+    <string name="hint_comments_send">Insira um comentário</string>
     <string name="register_new_user_title">Novo Usuário</string>
     <string name="photo_profile">Foto de Perfil</string>
     <string name="cd_img_register_user">Imagem perfil do usuário</string>
@@ -36,4 +37,5 @@
     <string name="tv_timeline_post_description">Descrição do post</string>
     <string name="tv_friends_city">Cidade</string>
     <string name="data_do_comentario">Data do comentário</string>
+    <string name="descricao_do_comentario">Descrição do comentário</string>
 </resources>

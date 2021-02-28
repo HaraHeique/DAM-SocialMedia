@@ -63,7 +63,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:text="@string/tv_timeline_post_description"
+        android:text="@string/descricao_do_comentario"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

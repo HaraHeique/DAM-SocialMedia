@@ -42,7 +42,7 @@ public class MainActivity extends BaseActivity {
         setupPostViewModel();
         postAdapter = new PostAdapter(postViewModel.getPostsList());
         setupRecyclerPostList();
-        onClickIconsMenuFooter();
+        onClickIconsMenuBottom();
     }
 
     @Override
@@ -51,6 +51,12 @@ public class MainActivity extends BaseActivity {
 
         filterPostsByCurrentUser();
         setVisibleMenu();
+    }
+
+    public void startCommentActivity(Post post) {
+        Intent intent = new Intent(context, CommentActivity.class);
+        intent.putExtra("title", post.title);
+        startActivity(intent);
     }
 
     private void logout() {
@@ -69,7 +75,7 @@ public class MainActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void onClickIconsMenuFooter() {
+    private void onClickIconsMenuBottom() {
         BottomNavigationView btvPosts = findViewById(R.id.bnv_posts);
 
         btvPosts.setOnNavigationItemSelectedListener(item -> {

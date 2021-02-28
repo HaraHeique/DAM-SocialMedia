@@ -17,7 +17,6 @@ public class Post {
     // Relation
     public User user;
 
-
     public Post(String title, String description, Drawable image, PostType type, User user) {
         this.title = title;
         this.description = description;

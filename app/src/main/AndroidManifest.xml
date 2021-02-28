@@ -19,6 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SocialMedia">
         <activity
+            android:name=".Activities.CommentActivity"
+            android:parentActivityName=".Activities.MainActivity" />
+        <activity
             android:name=".Activities.FriendActivity"
             android:parentActivityName=".Activities.MainActivity" />
         <activity
