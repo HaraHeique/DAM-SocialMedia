@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -16,11 +17,12 @@ import java.io.InputStream;
 
 public final class ImageUtil {
 
-    public static int calculateNoOfColumns(Context context, float columnWidthDp) { // For example columnWidthdp=180
+    public static int calculateNumberOfColumns(Context context, float columnWidthDp) { // For example columnWidthdp=180
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float screenWidthDp = displayMetrics.widthPixels;
-        int noOfColumns = (int) (screenWidthDp / columnWidthDp + 0.5); // +0.5 for correct rounding to int.
-        return noOfColumns;
+        int numberOfColumns = (int) (screenWidthDp / columnWidthDp + 0.5); // +0.5 for correct rounding to int.
+
+        return numberOfColumns;
     }
 
     public static Bitmap getBitmap(String imagePath, int w, int h) {
@@ -37,6 +39,13 @@ public final class ImageUtil {
         bmOptions.inSampleSize = scaleFactor;
 
         return BitmapFactory.decodeFile(imagePath, bmOptions);
+    }
+
+    public static Bitmap getBitmap(Resources resources, int drawableId, int w, int h) {
+        Bitmap bitmap = BitmapFactory.decodeResource(resources, drawableId);
+        bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
+
+        return bitmap;
     }
 
     public static Bitmap getBitmap(String imagePath) {

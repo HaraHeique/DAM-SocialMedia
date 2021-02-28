@@ -44,6 +44,19 @@ public class PostViewModel extends ViewModel {
     }
 
     // Queria utilizar stream(), mas não é possível para API < 24
+    public List<Post> getImagePostsByLogin(String login) {
+        List<Post> result = new ArrayList<>();
+
+        for (Post post: postsList) {
+            if (post.user.login.equals(login) && post.type == PostType.IMAGE) {
+                result.add(post);
+            }
+        }
+
+        return result;
+    }
+
+    // Queria utilizar stream(), mas não é possível para API < 24
     public List<Post> getPostsByFollow(boolean following) {
         List<Post> result = new ArrayList<>();
 
@@ -158,9 +171,33 @@ public class PostViewModel extends ViewModel {
                 usuarioLogado
             );
 
+            Post post3usuariologado = new Post(
+                "Então!",
+                "Meee!",
+                ImageUtil.getDrawable(resources, R.drawable.post3_usuariologado),
+                PostType.IMAGE,
+                usuarioLogado
+            );
+
+            Post post4usuariologado = new Post(
+                "Melhor anime!",
+                "Melhor anime de todos!",
+                ImageUtil.getDrawable(resources, R.drawable.post4_usuariologado),
+                PostType.IMAGE,
+                usuarioLogado
+            );
+
+            Post post5usuariologado = new Post(
+                "One Piece",
+                "Já com quase 1000 episódios.",
+                ImageUtil.getDrawable(resources, R.drawable.post5_usuariologado),
+                PostType.IMAGE,
+                usuarioLogado
+            );
+
             return Arrays.asList(
                 post1avatar, post1usuariologado, post1Joaquin, post1Joaquina, post2Joaquina,
-                post2usuariologado
+                post2usuariologado, post3usuariologado, post4usuariologado, post5usuariologado
             );
         }
 

@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
         super.onResume();
 
         filterPostsByCurrentUser();
-        setVisibleMenu();
+        setVisibilityItemsMenu();
     }
 
     public void startCommentActivity(Post post) {
@@ -72,6 +72,11 @@ public class MainActivity extends BaseActivity {
 
     private void onClickIconFriends() {
         Intent intent = new Intent(context, FriendActivity.class);
+        startActivity(intent);
+    }
+
+    private void onClickIconGallery() {
+        Intent intent = new Intent(context, GalleryActivity.class);
         startActivity(intent);
     }
 
@@ -115,7 +120,7 @@ public class MainActivity extends BaseActivity {
         postRecycleList.setLayoutManager(new LinearLayoutManager(context));
     }
 
-    private void setVisibleMenu() {
+    private void setVisibilityItemsMenu() {
         if (menuTop == null) return;
 
         BottomNavigationView navigationView = findViewById(R.id.bnv_posts);
@@ -131,6 +136,7 @@ public class MainActivity extends BaseActivity {
         MenuItem logoutMenuItem = menuTop.findItem(R.id.op_logout);
         MenuItem addPostMenuItem = menuTop.findItem(R.id.op_addpost);
         MenuItem friendsMenuItem = menuTop.findItem(R.id.op_friends);
+        MenuItem galleryMenuItem = menuTop.findItem(R.id.op_gallery);
 
         if (LoginSessionUtil.isLogged(context)) {
             showItemMenu(allWorldMenuItem);
@@ -141,6 +147,7 @@ public class MainActivity extends BaseActivity {
             showItemMenu(logoutMenuItem);
             showItemMenu(addPostMenuItem);
             showItemMenu(friendsMenuItem);
+            showItemMenu(galleryMenuItem);
         } else {
             disableItemMenu(allWorldMenuItem);
             hideItemMenu(myWorldMenuItem);
@@ -150,6 +157,7 @@ public class MainActivity extends BaseActivity {
             hideItemMenu(logoutMenuItem);
             hideItemMenu(addPostMenuItem);
             hideItemMenu(friendsMenuItem);
+            hideItemMenu(galleryMenuItem);
         }
     }
 
@@ -179,7 +187,7 @@ public class MainActivity extends BaseActivity {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_nav_top, menu);
-        setVisibleMenu();
+        setVisibilityItemsMenu();
 
         return true;
     }
@@ -190,14 +198,22 @@ public class MainActivity extends BaseActivity {
 
         if (itemId == R.id.op_login || itemId == R.id.op_logout) {
             logout();
+            return false;
         }
 
         if (itemId == R.id.op_addpost) {
             onClickIconAddNewPost();
+            return false;
         }
 
         if (itemId == R.id.op_friends) {
             onClickIconFriends();
+            return false;
+        }
+
+        if (itemId == R.id.op_gallery) {
+            onClickIconGallery();
+            return false;
         }
 
         return super.onOptionsItemSelected(item);

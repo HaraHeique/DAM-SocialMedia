@@ -26,6 +26,7 @@
     <string name="op_login_title">Entrar</string>
     <string name="op_addpost_title">Adicionar Novo Post</string>
     <string name="op_friends_title">Amigos</string>
+    <string name="op_gallery_title">Galeria de Fotos</string>
     <string name="op_allworld_title">Todo Mundo</string>
     <string name="op_myworld_title">Meu Mundo</string>
     <string name="op_onlyme_title">Só Meu</string>

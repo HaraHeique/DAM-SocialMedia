@@ -6,11 +6,16 @@
         android:id="@+id/op_addpost"
         android:icon="@drawable/ic_baseline_add_24"
         android:title="@string/op_addpost_title"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/op_friends"
         android:icon="@drawable/ic_baseline_groups_24"
         android:title="@string/op_friends_title"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/op_gallery"
+        android:icon="@drawable/ic_baseline_photo_library_24"
+        android:title="@string/op_gallery_title"
         app:showAsAction="always" />
     <item
         android:id="@+id/op_login"
@@ -21,5 +26,5 @@
         android:id="@+id/op_logout"
         android:icon="@drawable/ic_baseline_logout_24"
         android:title="@string/op_logout_title"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>
