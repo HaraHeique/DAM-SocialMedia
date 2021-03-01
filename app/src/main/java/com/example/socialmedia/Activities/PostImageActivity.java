@@ -2,6 +2,7 @@ package com.example.socialmedia.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,12 +20,14 @@ import com.example.socialmedia.ViewModels.PostViewModel;
 public class PostImageActivity extends BaseActivity {
 
     private PostViewModel postViewModel;
+    private CurrentUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_image);
 
+        currentUser = LoginSessionUtil.getCurrentInfo(context);
         setupPostViewModel();
         Post postSelected = getPostSelected();
         setToolbarConfig(R.id.tb_post_image, "Detalhes do Post", true);
@@ -40,7 +43,6 @@ public class PostImageActivity extends BaseActivity {
     private Post getPostSelected() {
         Intent intent = getIntent();
         int position = intent.getIntExtra("position", 0);
-        CurrentUser currentUser = LoginSessionUtil.getCurrentInfo(context);
 
         return postViewModel.getImagePostsByLogin(currentUser.login).get(position);
     }
@@ -52,8 +54,8 @@ public class PostImageActivity extends BaseActivity {
         TextView userNameTv = findViewById(R.id.tv_timeline_name);
         TextView userLoginTv = findViewById(R.id.tv_timeline_login);
         ImageView userAvatarTv = findViewById(R.id.imv_timeline_avatar);
-        ImageView followingIv = findViewById(R.id.imv_timeline_follow);
         ImageView postImageIv = findViewById(R.id.imv_timeline_post);
+        ImageView followingIv = findViewById(R.id.imv_timeline_follow);
 
         postImageIv.setImageDrawable(postSelected.image);
         titleTv.setText(postSelected.title);
@@ -62,12 +64,7 @@ public class PostImageActivity extends BaseActivity {
         userNameTv.setText(postSelected.user.name);
         userLoginTv.setText(postSelected.user.login);
         userAvatarTv.setImageDrawable(postSelected.user.avatar);
-
-        if (!postSelected.user.following) {
-            followingIv.setImageDrawable(ImageUtil.getDrawable(getResources(), R.drawable.ic_baseline_person_add_24));
-        } else {
-            followingIv.setImageDrawable(ImageUtil.getDrawable(getResources(), R.drawable.ic_baseline_person_add_disabled_24));
-        }
+        followingIv.setVisibility(View.GONE);
     }
 
     private void onClickIconComment(Post postSelected) {

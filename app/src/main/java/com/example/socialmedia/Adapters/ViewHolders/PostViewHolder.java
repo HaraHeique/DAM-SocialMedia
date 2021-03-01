@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.DateTimeUtil;
@@ -48,6 +49,7 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Post post) {
         String formatDate = DateTimeUtil.ConvertToStrDateTime(post.createDate);
+        CurrentUser currentUser = LoginSessionUtil.getCurrentInfo(this.context);
 
         this.titleTv.setText(post.title);
         this.descriptionTv.setText(post.description);
@@ -56,11 +58,15 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
         this.userLoginTv.setText(post.user.login);
         this.userAvatarTv.setImageDrawable(post.user.avatar);
 
-        if (LoginSessionUtil.isLogged(this.context)) {
+        if (currentUser.isLogged && !currentUser.login.equalsIgnoreCase(post.user.login)) {
             Drawable followingIcon = this.getFollowingIcon(post.user.following);
             this.followingIv.setImageDrawable(followingIcon);
+            followingIv.setVisibility(View.VISIBLE);
         } else {
             this.followingIv.setVisibility(View.GONE);
+        }
+
+        if (!currentUser.isLogged) {
             this.commentIv.setVisibility(View.GONE);
         }
     }
