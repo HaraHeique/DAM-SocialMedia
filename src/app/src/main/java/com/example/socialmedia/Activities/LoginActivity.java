@@ -1,21 +1,33 @@
 package com.example.socialmedia.Activities;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 
+import com.example.socialmedia.AppConfig;
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
-import com.example.socialmedia.Utils.LoginSessionUtil;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class LoginActivity extends BaseActivity {
 
     private static final int NEW_USER_RESULT = 1;
+    private static final int RESULT_REQUEST_PERMISSION = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +37,14 @@ public class LoginActivity extends BaseActivity {
         hideActionBar();
         onBtnClickRegisterNewUser();
         onBtnClickLogin();
+        askForPermissions(Collections.singletonList(Manifest.permission.CAMERA));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        startMainActivity();
+        startPostActivity();
     }
 
     private void onBtnClickRegisterNewUser() {
@@ -54,8 +67,8 @@ public class LoginActivity extends BaseActivity {
                 return;
             }
 
-            LoginSessionUtil.setLogin(context, true);
-            startMainActivity();
+            AppConfig.setLogin(context, true);
+            startPostActivity();
         });
     }
 
@@ -70,12 +83,12 @@ public class LoginActivity extends BaseActivity {
         String bornDate = data.getStringExtra("bornDate");
         String city = data.getStringExtra("city");
 
-        // Isto não é seguro, mas por enquanto não tem comunicação com o server deixar assim
+        // Isto não é seguro, mas por enquanto não tem autenticação via token logo deixar assim
         String password = data.getStringExtra("password");
 
         CurrentUser user = new CurrentUser(login, name, bornDate, city, password, pathImgProfile);
 
-        LoginSessionUtil.setCurrentUserInfo(context, user);
+        AppConfig.setCurrentUser(context, user);
     }
 
     private boolean validateUserLogin(String login, String password) {
@@ -84,7 +97,7 @@ public class LoginActivity extends BaseActivity {
             return false;
         }
 
-        CurrentUser user = LoginSessionUtil.getCurrentInfo(context);
+        CurrentUser user = AppConfig.getCurrentUser(context);
 
         if (user.login.equals(login) && user.password.equals(password)) {
             return true;
@@ -95,9 +108,9 @@ public class LoginActivity extends BaseActivity {
         return false;
     }
 
-    private void startMainActivity() {
-        if (LoginSessionUtil.isLogged(context)) {
-            Intent intent = new Intent(context, MainActivity.class);
+    private void startPostActivity() {
+        if (AppConfig.isLogged(context)) {
+            Intent intent = new Intent(context, PostActivity.class);
             startActivity(intent);
         }
     }
@@ -110,4 +123,63 @@ public class LoginActivity extends BaseActivity {
             setUserInfoLogin(data);
         }
     }
+
+    //region Permissão para acessar os recursos desejados
+    protected void askForPermissions(List<String> permissions) {
+        List<String> permissionNotGranted = new ArrayList<>();
+
+        for (String permission : permissions) {
+            if (hasPermission(permission)) {
+                permissionNotGranted.add(permission);
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (permissionNotGranted.size() > 0) {
+                requestPermissions(permissionNotGranted.toArray(new String[permissionNotGranted.size()]), RESULT_REQUEST_PERMISSION);
+            }
+        }
+    }
+
+    private boolean hasPermission(String permission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        List<String> permissionsRejected = new ArrayList<>();
+
+        if (requestCode == RESULT_REQUEST_PERMISSION) {
+            for (String permission : permissions) {
+                if (hasPermission(permission)) {
+                    permissionsRejected.add(permission);
+                }
+            }
+        }
+
+        // Pergunta por permissão novamente
+        if (permissionsRejected.size() > 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
+                    new AlertDialog.Builder(LoginActivity.this)
+                            .setMessage("Para utilizar este APP é preciso conceder essas permissões!")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]), RESULT_REQUEST_PERMISSION);
+                                }
+                            })
+                            .create()
+                            .show();
+                }
+            }
+        }
+    }
+    //endregion
 }

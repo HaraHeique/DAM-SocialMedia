@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialmedia.Activities.GalleryActivity;
-import com.example.socialmedia.Activities.MainActivity;
 import com.example.socialmedia.Adapters.ViewHolders.GalleryViewHolder;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;

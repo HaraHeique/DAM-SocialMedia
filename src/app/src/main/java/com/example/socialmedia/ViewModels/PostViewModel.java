@@ -5,6 +5,7 @@ import android.content.res.Resources;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.socialmedia.AppConfig;
 import com.example.socialmedia.Enums.PostType;
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.Models.Post;
@@ -12,7 +13,6 @@ import com.example.socialmedia.Models.User;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
-import com.example.socialmedia.Utils.LoginSessionUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,7 +84,7 @@ public class PostViewModel extends ViewModel {
 
     private List<Post> mockData(Context context) {
         Resources resources = context.getResources();
-        CurrentUser currentUser = LoginSessionUtil.getCurrentInfo(context);
+        CurrentUser currentUser = AppConfig.getCurrentUser(context);
 
         User usuarioJoaquin = new User(
             "Joaquin Phoenix",

@@ -10,12 +10,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.socialmedia.AppConfig;
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
-import com.example.socialmedia.Utils.LoginSessionUtil;
 
 public abstract class PostViewHolder extends RecyclerView.ViewHolder {
 
@@ -49,7 +49,7 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Post post) {
         String formatDate = DateTimeUtil.ConvertToStrDateTime(post.createDate);
-        CurrentUser currentUser = LoginSessionUtil.getCurrentInfo(this.context);
+        CurrentUser currentUser = AppConfig.getCurrentUser(this.context);
 
         this.titleTv.setText(post.title);
         this.descriptionTv.setText(post.description);

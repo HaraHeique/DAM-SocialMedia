@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public final class DateTimeUtil {
+
     public static final DateFormat defaultDateTimeFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     public static final DateFormat defaultDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -42,6 +43,14 @@ public final class DateTimeUtil {
 
     public static String ConvertToStrDate(Date date) {
         return defaultDateFormatter.format(date);
+    }
+
+    public static long ConvertToUnixTimeStamp(Date date) {
+        return date.getTime() / 1000L;
+    }
+
+    public static Date ConvertToDate(long unixTimeStamp) {
+        return new Date(unixTimeStamp * 1000L);
     }
 
     public static Calendar getCalendar(Date date) {

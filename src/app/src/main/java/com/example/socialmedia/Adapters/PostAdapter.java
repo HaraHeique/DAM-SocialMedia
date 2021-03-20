@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.socialmedia.Activities.MainActivity;
+import com.example.socialmedia.Activities.PostActivity;
 import com.example.socialmedia.Adapters.ViewHolders.PostCommentViewHolder;
 import com.example.socialmedia.Adapters.ViewHolders.PostImageViewHolder;
 import com.example.socialmedia.Adapters.ViewHolders.PostViewHolder;
@@ -67,6 +67,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     private void onClickBtnComment(View itemView, int position) {
         ImageView btnComment = itemView.findViewById(R.id.imv_timeline_comment);
-        btnComment.setOnClickListener(v -> ((MainActivity)v.getContext()).startCommentActivity(this.posts.get(position)));
+        btnComment.setOnClickListener(v -> ((PostActivity)v.getContext()).startCommentActivity(this.posts.get(position)));
     }
 }

@@ -1,11 +1,13 @@
-package com.example.socialmedia.Utils;
+package com.example.socialmedia;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.socialmedia.Models.CurrentUser;
 
-public final class LoginSessionUtil {
+public final class AppConfig {
+
+    public static final String BASE_URL = "https://socialifes.herokuapp.com/";
 
     public static boolean isLogged(Context context) {
         SharedPreferences mPrefs = context.getSharedPreferences("currentUserInfo", 0);
@@ -13,7 +15,7 @@ public final class LoginSessionUtil {
         return mPrefs.getBoolean("isLogged", false);
     }
 
-    public static CurrentUser getCurrentInfo(Context context) {
+    public static CurrentUser getCurrentUser(Context context) {
         SharedPreferences mPrefs = context.getSharedPreferences("currentUserInfo", 0);
 
         CurrentUser currentUser = new CurrentUser(
@@ -35,9 +37,10 @@ public final class LoginSessionUtil {
         mEditor.putBoolean("isLogged", value).apply();
     }
 
-    public static void setCurrentUserInfo(Context context, CurrentUser user) {
+    public static void setCurrentUser(Context context, CurrentUser user) {
         SharedPreferences mPrefs = context.getSharedPreferences("currentUserInfo", 0);
         SharedPreferences.Editor mEditor = mPrefs.edit();
+
         mEditor.putString("password", user.password);
         mEditor.putString("name", user.name);
         mEditor.putString("login", user.login);

@@ -8,12 +8,11 @@ import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.socialmedia.AppConfig;
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.DateTimeUtil;
-import com.example.socialmedia.Utils.ImageUtil;
-import com.example.socialmedia.Utils.LoginSessionUtil;
 import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
 import com.example.socialmedia.ViewModels.PostViewModel;
 
@@ -27,7 +26,7 @@ public class PostImageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_image);
 
-        currentUser = LoginSessionUtil.getCurrentInfo(context);
+        currentUser = AppConfig.getCurrentUser(context);
         setupPostViewModel();
         Post postSelected = getPostSelected();
         setToolbarConfig(R.id.tb_post_image, "Detalhes do Post", true);

@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialmedia.Adapters.GalleryAdapter;
+import com.example.socialmedia.AppConfig;
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.ImageUtil;
-import com.example.socialmedia.Utils.LoginSessionUtil;
 import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
 import com.example.socialmedia.ViewModels.PostViewModel;
 
@@ -46,7 +46,7 @@ public class GalleryActivity extends BaseActivity {
     }
 
     private void setupGalleryAdapter() {
-        CurrentUser currentUser = LoginSessionUtil.getCurrentInfo(context);
+        CurrentUser currentUser = AppConfig.getCurrentUser(context);
         List<Post> currentUserPosts = postViewModel.getImagePostsByLogin(currentUser.login);
         galleryAdapter = new GalleryAdapter(currentUserPosts);
     }
