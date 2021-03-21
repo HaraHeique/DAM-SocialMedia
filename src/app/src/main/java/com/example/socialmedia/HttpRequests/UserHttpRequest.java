@@ -15,7 +15,7 @@ public class UserHttpRequest {
 
     private HttpRequest httpRequest;
 
-    public JSONObject register(User user) throws IOException, JSONException {
+    public ObjectResponse<User> register(User user) throws IOException, JSONException {
         String requestUrl = AppConfig.BASE_URL + "cadastra_usuario.php";
 
         httpRequest = new HttpRequest(requestUrl, "POST", "UTF-8");
@@ -30,10 +30,13 @@ public class UserHttpRequest {
         String response = httpRequest.getResponseString(inputStream, "UTF-8");
         httpRequest.finish();
 
-        return new JSONObject(response);
+        ObjectResponse<User> objResponse = httpRequest.getCommonObject(response);
+        objResponse.data = user;
+
+        return objResponse;
     }
 
-    public JSONObject login(String login, String password) throws IOException, JSONException {
+    public ObjectResponse<String> login(String login, String password) throws IOException, JSONException {
         String requestUrl = AppConfig.BASE_URL + "login.php";
 
         httpRequest = new HttpRequest(requestUrl, "POST", "UTF-8");
@@ -45,6 +48,9 @@ public class UserHttpRequest {
         String response = httpRequest.getResponseString(inputStream, "UTF-8");
         httpRequest.finish();
 
-        return new JSONObject(response);
+        ObjectResponse<String> objResponse = httpRequest.getCommonObject(response);
+        objResponse.data = objResponse.success ? objResponse.jsonObject.getString("auth_token") : null;
+
+        return objResponse;
     }
 }

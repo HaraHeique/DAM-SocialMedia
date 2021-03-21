@@ -16,13 +16,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import com.example.socialmedia.AppConfig;
+import com.example.socialmedia.HttpRequests.ObjectResponse;
 import com.example.socialmedia.HttpRequests.UserHttpRequest;
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,16 +76,6 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void setInfoAfterRegisterUser(Intent data) {
-        if (data == null) { return; }
-
-        EditText etLogin = findViewById(R.id.et_login);
-        EditText etPassword = findViewById(R.id.et_password);
-
-        etLogin.setText(data.getStringExtra("login"));
-        etPassword.setText(data.getStringExtra("password"));
-    }
-
     private boolean validateUserLogin(String login, String password) {
         if (login.isEmpty() || password.isEmpty()) {
             AlertMessageUtil.defaultAlert(context, "Campos de Login e Senha são requeridos!");
@@ -101,16 +91,13 @@ public class LoginActivity extends BaseActivity {
             UserHttpRequest userRequest = new UserHttpRequest();
 
             try {
-                JSONObject response = userRequest.login(login, password);
-                int status = response.getInt("status");
-                String message = response.getString("message");
-                String authToken = status == 0 ? response.getString("auth_token") : null;
+                ObjectResponse<String> response = userRequest.login(login, password);
 
                 runOnUiThread(() -> {
-                    AlertMessageUtil.defaultAlert(context, message);
+                    AlertMessageUtil.defaultAlert(context, response.message);
 
-                    if (status == 0) {
-                        setUserInfoLogin(login, authToken);
+                    if (response.success) {
+                        setUserInfoLogin(login, response.data);
                         startPostActivity();
                     }
                 });
@@ -132,6 +119,16 @@ public class LoginActivity extends BaseActivity {
             Intent intent = new Intent(context, PostActivity.class);
             startActivity(intent);
         }
+    }
+
+    private void setInfoAfterRegisterUser(Intent data) {
+        if (data == null) { return; }
+
+        EditText etLogin = findViewById(R.id.et_login);
+        EditText etPassword = findViewById(R.id.et_password);
+
+        etLogin.setText(data.getStringExtra("login"));
+        etPassword.setText(data.getStringExtra("password"));
     }
 
     @Override

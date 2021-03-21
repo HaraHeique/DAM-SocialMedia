@@ -1,5 +1,8 @@
 package com.example.socialmedia.HttpRequests;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +34,6 @@ public class HttpRequest {
     private HttpURLConnection httpConn;
     private OutputStream outputStream;
     private PrintWriter writer;
-
 
     // Construtor da classe HttpRequest
     // requestUrl -> o endereco a ser conectado
@@ -171,5 +173,16 @@ public class HttpRequest {
         inputStream.close();
 
         return builder.toString();
+    }
+
+    // Retorna um objeto complexo pegando campos comuns da resposta proveniente do servidor
+    public <TObject> ObjectResponse<TObject> getCommonObject(String response) throws JSONException {
+        ObjectResponse<TObject> objResponse = new ObjectResponse<>();
+
+        objResponse.jsonObject = new JSONObject(response);
+        objResponse.message = objResponse.jsonObject.getString("message");
+        objResponse.success = objResponse.jsonObject.getInt("status") == 0;
+
+        return objResponse;
     }
 }

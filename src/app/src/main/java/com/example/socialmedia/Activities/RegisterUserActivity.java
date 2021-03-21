@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
+import com.example.socialmedia.HttpRequests.ObjectResponse;
 import com.example.socialmedia.HttpRequests.UserHttpRequest;
 import com.example.socialmedia.Models.User;
 import com.example.socialmedia.R;
@@ -23,7 +24,6 @@ import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +47,12 @@ public class RegisterUserActivity extends BaseActivity {
         onClickBtnConfirmRegisterUser();
     }
 
+    private void onClickPhotoPicker() {
+        ImageView btnImg = findViewById(R.id.imv_newuser_imgprofile);
+
+        btnImg.setOnClickListener(v -> dispatchTakePictureIntent());
+    }
+
     private void onClickBtnConfirmRegisterUser() {
         Button btnConfirmRegister = findViewById(R.id.btn_newuser_confirm);
 
@@ -65,12 +71,6 @@ public class RegisterUserActivity extends BaseActivity {
 
             registerUser(registeredUser);
         });
-    }
-
-    private void onClickPhotoPicker() {
-        ImageView btnImg = findViewById(R.id.imv_newuser_imgprofile);
-
-        btnImg.setOnClickListener(v -> dispatchTakePictureIntent());
     }
 
     private void dispatchTakePictureIntent() {
@@ -105,21 +105,17 @@ public class RegisterUserActivity extends BaseActivity {
             UserHttpRequest userRequest = new UserHttpRequest();
 
             try {
-                JSONObject response = userRequest.register(user);
-                int status = response.getInt("status");
-                String message = response.getString("message");
+                ObjectResponse<User> response = userRequest.register(user);
 
                 runOnUiThread(() -> {
-                    AlertMessageUtil.defaultAlert(context, message);
+                    AlertMessageUtil.defaultAlert(context, response.message);
 
-                    if (status == 0) {
-                        finishActivityWithResult(user);
+                    if (response.success) {
+                        finishActivityWithResult(response.data);
                     }
                 });
             } catch (IOException | JSONException e) {
-                e.printStackTrace();
-                //runOnUiThread(() -> AlertMessageUtil.errorRequestAlert(context));
-                runOnUiThread(() -> AlertMessageUtil.defaultAlert(context, e.getMessage()));
+                runOnUiThread(() -> AlertMessageUtil.errorRequestAlert(context));
             }
         });
     }
@@ -153,7 +149,8 @@ public class RegisterUserActivity extends BaseActivity {
     private boolean ValidateRegisterUser(User user, String confirmPassword) {
         if (!ValidateLogin(user.login) || !ValidatePassword(user.password) ||
             !ValidateConfirmPassword(user.password, confirmPassword) || !ValidateName(user.name) ||
-            !ValidateBornDate(user.bornDate) || !ValidateCity(user.city)) {
+            !ValidateBornDate(user.bornDate) || !ValidateCity(user.city) ||
+            !ValidateImage(user.avatarPath)) {
             return false;
         }
 
