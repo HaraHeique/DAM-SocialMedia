@@ -13,6 +13,7 @@ public class User {
     public String city;
     public boolean following; // Atributo para facilitar nos mocks (usuário corrente segue este usuário)
     public Drawable avatar;
+    public String avatarPath;
     public String appToken;
     public String authToken;
 
@@ -33,5 +34,14 @@ public class User {
         this.city = city;
         this.appToken = appToken;
         this.authToken = authToken;
+    }
+
+    public User(String name, String login, String password, Date bornDate, String city, String avatarPath) {
+        this.name = name;
+        this.login = login;
+        this.password = password;
+        this.bornDate = bornDate;
+        this.city = city;
+        this.avatarPath = avatarPath;
     }
 }

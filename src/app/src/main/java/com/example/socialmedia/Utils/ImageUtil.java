@@ -10,9 +10,12 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.util.DisplayMetrics;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public final class ImageUtil {
 
@@ -120,5 +123,27 @@ public final class ImageUtil {
 
     public static Drawable getDrawable(String imagePath) {
         return Drawable.createFromPath(imagePath);
+    }
+
+    public static File getImageFile(String imagePath, Bitmap bitmap) {
+        File imageFile = new File(imagePath);
+
+        OutputStream os;
+        try {
+            os = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return imageFile;
+    }
+
+    public static File getImageFile(String imagePath, int w, int h) {
+        Bitmap bitmap = getBitmap(imagePath, w, h);
+
+        return getImageFile(imagePath, bitmap);
     }
 }

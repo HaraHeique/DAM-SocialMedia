@@ -10,13 +10,14 @@ public final class AppConfig {
     public static final String BASE_URL = "https://socialifes.herokuapp.com/";
 
     public static boolean isLogged(Context context) {
-        SharedPreferences mPrefs = context.getSharedPreferences("currentUserInfo", 0);
+        SharedPreferences mPrefs = context.getSharedPreferences("configs", 0);
 
-        return mPrefs.getBoolean("isLogged", false);
+        return mPrefs.getBoolean("isLogged", false) &&
+               !mPrefs.getString("authToken", "").isEmpty();
     }
 
     public static CurrentUser getCurrentUser(Context context) {
-        SharedPreferences mPrefs = context.getSharedPreferences("currentUserInfo", 0);
+        SharedPreferences mPrefs = context.getSharedPreferences("configs", 0);
 
         CurrentUser currentUser = new CurrentUser(
             mPrefs.getString("login", ""),
@@ -32,13 +33,15 @@ public final class AppConfig {
     }
 
     public static void setLogin(Context context, boolean value) {
-        SharedPreferences mPrefs = context.getSharedPreferences("currentUserInfo", 0);
+        SharedPreferences mPrefs = context.getSharedPreferences("configs", 0);
         SharedPreferences.Editor mEditor = mPrefs.edit();
         mEditor.putBoolean("isLogged", value).apply();
+
+        if (!value) { mEditor.clear(); }
     }
 
     public static void setCurrentUser(Context context, CurrentUser user) {
-        SharedPreferences mPrefs = context.getSharedPreferences("currentUserInfo", 0);
+        SharedPreferences mPrefs = context.getSharedPreferences("configs", 0);
         SharedPreferences.Editor mEditor = mPrefs.edit();
 
         mEditor.putString("password", user.password);
@@ -47,6 +50,7 @@ public final class AppConfig {
         mEditor.putString("city", user.city);
         mEditor.putString("bornDate", user.bornDate);
         mEditor.putString("pathImgProfile", user.pathImgProfile);
+        mEditor.putString("authToken", user.authToken);
         mEditor.apply();
     }
 }

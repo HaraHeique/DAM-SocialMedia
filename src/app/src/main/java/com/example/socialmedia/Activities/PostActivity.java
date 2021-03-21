@@ -33,21 +33,21 @@ public class PostActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_post);
 
         setToolbarConfig(R.id.tb_main, "Timeline", false);
-        setupPostViewModel();
-        postAdapter = new PostAdapter(postViewModel.getPostsList());
-        setupRecyclerPostList();
-        onClickIconsMenuBottom();
+        //setupPostViewModel();
+        //postAdapter = new PostAdapter(postViewModel.getPostsList());
+        //setupRecyclerPostList();
+        //onClickIconsMenuBottom();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        filterPostsByCurrentUser();
-        setVisibilityItemsMenu();
+        //filterPostsByCurrentUser();
+        //setVisibilityItemsMenu();
     }
 
     public void startCommentActivity(Post post) {

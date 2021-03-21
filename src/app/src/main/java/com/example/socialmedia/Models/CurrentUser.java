@@ -8,6 +8,7 @@ public class CurrentUser {
     public String city;
     public String password;
     public String pathImgProfile;
+    public String authToken;
     public boolean isLogged;
 
     public CurrentUser(String login, String name, String bornDate, String city, String password, String pathImgProfile) {
@@ -17,5 +18,10 @@ public class CurrentUser {
         this.city = city;
         this.password = password;
         this.pathImgProfile = pathImgProfile;
+    }
+
+    public CurrentUser(String login, String auth_token) {
+        this.login = login;
+        this.authToken = auth_token;
     }
 }

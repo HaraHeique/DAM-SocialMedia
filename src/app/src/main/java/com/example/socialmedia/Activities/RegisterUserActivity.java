@@ -15,18 +15,25 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
+import com.example.socialmedia.HttpRequests.UserHttpRequest;
+import com.example.socialmedia.Models.User;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
 import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RegisterUserActivity extends BaseActivity {
 
     private static final int RESULT_TAKE_PICTURE = 1;
-
 
     private String currentPhotoPath;
 
@@ -44,30 +51,19 @@ public class RegisterUserActivity extends BaseActivity {
         Button btnConfirmRegister = findViewById(R.id.btn_newuser_confirm);
 
         btnConfirmRegister.setOnClickListener(v -> {
-            String login = ((EditText)findViewById(R.id.et_newuser_login)).getText().toString();
-            String password = ((EditText)findViewById(R.id.et_newuser_password)).getText().toString();
             String confirmPassword = ((EditText)findViewById(R.id.et_newuser_confirmpassword)).getText().toString();
-            String name = ((EditText)findViewById(R.id.et_newuser_name)).getText().toString();
-            String bornDate = ((EditText)findViewById(R.id.et_newuser_borndate)).getText().toString();
-            String city = ((EditText)findViewById(R.id.et_newuser_city)).getText().toString();
-            String imageProfile = currentPhotoPath;
+            User registeredUser = new User(
+                ((EditText)findViewById(R.id.et_newuser_name)).getText().toString(),
+                ((EditText)findViewById(R.id.et_newuser_login)).getText().toString(),
+                ((EditText)findViewById(R.id.et_newuser_password)).getText().toString(),
+                DateTimeUtil.ConvertToDate(((EditText)findViewById(R.id.et_newuser_borndate)).getText().toString()),
+                ((EditText)findViewById(R.id.et_newuser_city)).getText().toString(),
+                currentPhotoPath
+            );
 
-            if (!ValidateLogin(login) || !ValidatePassword(password) ||
-                !ValidateConfirmPassword(password, confirmPassword) || !ValidateName(name) ||
-                !ValidateBornDate(bornDate) || !ValidateCity(city) ||
-                !ValidateImage(imageProfile)) {
-                return;
-            }
+            if (!ValidateRegisterUser(registeredUser, confirmPassword)) { return; }
 
-            Intent intent = new Intent();
-            intent.putExtra("name", name);
-            intent.putExtra("login", login);
-            intent.putExtra ("bornDate", bornDate);
-            intent.putExtra("password", password);
-            intent.putExtra("city", city);
-            intent.putExtra("pathImgProfile", imageProfile);
-            setResult(Activity.RESULT_OK, intent);
-            finish();
+            registerUser(registeredUser);
         });
     }
 
@@ -85,7 +81,7 @@ public class RegisterUserActivity extends BaseActivity {
         try {
             file = createImageFile();
         } catch (IOException e) {
-            Toast.makeText(context, "Não foi possível criar o arquivo", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Não foi possível criar o arquivo.", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -103,6 +99,39 @@ public class RegisterUserActivity extends BaseActivity {
         return File.createTempFile(filename, ".jpg", storageDir);
     }
 
+    private void registerUser(User user) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
+            UserHttpRequest userRequest = new UserHttpRequest();
+
+            try {
+                JSONObject response = userRequest.register(user);
+                int status = response.getInt("status");
+                String message = response.getString("message");
+
+                runOnUiThread(() -> {
+                    AlertMessageUtil.defaultAlert(context, message);
+
+                    if (status == 0) {
+                        finishActivityWithResult(user);
+                    }
+                });
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+                //runOnUiThread(() -> AlertMessageUtil.errorRequestAlert(context));
+                runOnUiThread(() -> AlertMessageUtil.defaultAlert(context, e.getMessage()));
+            }
+        });
+    }
+
+    private void finishActivityWithResult(User user) {
+        Intent intent = new Intent();
+        intent.putExtra("login", user.login);
+        intent.putExtra("password", user.password);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
     // Após ser executado o intent da câmera
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -110,9 +139,9 @@ public class RegisterUserActivity extends BaseActivity {
 
         if (requestCode == RESULT_TAKE_PICTURE) {
             if (resultCode == RESULT_OK) {
+                ImageView imageView = findViewById(R.id.imv_newuser_imgprofile);
                 Bitmap imgBitmap = ImageUtil.getBitmap(currentPhotoPath);
                 imgBitmap = ImageUtil.autoRotateImage(imgBitmap, currentPhotoPath);
-                ImageView imageView = findViewById(R.id.imv_newuser_imgprofile);
                 imageView.setImageBitmap(imgBitmap);
             } else {
                 new File(currentPhotoPath).delete();
@@ -120,7 +149,17 @@ public class RegisterUserActivity extends BaseActivity {
         }
     }
 
-    // Validações do form de cadastro //
+    // Validações do form de cadastro
+    private boolean ValidateRegisterUser(User user, String confirmPassword) {
+        if (!ValidateLogin(user.login) || !ValidatePassword(user.password) ||
+            !ValidateConfirmPassword(user.password, confirmPassword) || !ValidateName(user.name) ||
+            !ValidateBornDate(user.bornDate) || !ValidateCity(user.city)) {
+            return false;
+        }
+
+        return true;
+    }
+
     private boolean ValidateLogin(String value) {
         if (value.length() < 4) {
             AlertMessageUtil.defaultAlert(context, "Login deve conter no mínimo 4 caracteres.");
@@ -157,8 +196,8 @@ public class RegisterUserActivity extends BaseActivity {
         return true;
     }
 
-    private boolean ValidateBornDate(String date) {
-        if (DateTimeUtil.ConvertToDate(date) == null) {
+    private boolean ValidateBornDate(Date date) {
+        if (date == null) {
             AlertMessageUtil.defaultAlert(context, "Data deve ser no formato dd/MM/yyyy");
             return false;
         }

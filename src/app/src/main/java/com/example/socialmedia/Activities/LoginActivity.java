@@ -16,13 +16,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import com.example.socialmedia.AppConfig;
+import com.example.socialmedia.HttpRequests.UserHttpRequest;
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LoginActivity extends BaseActivity {
 
@@ -63,32 +70,20 @@ public class LoginActivity extends BaseActivity {
             String login = ((EditText)findViewById(R.id.et_login)).getText().toString();
             String password = ((EditText)findViewById(R.id.et_password)).getText().toString();
 
-            if (!validateUserLogin(login, password)) {
-                return;
-            }
+            if (!validateUserLogin(login, password)) { return; }
 
-            AppConfig.setLogin(context, true);
-            startPostActivity();
+            login(login, password);
         });
     }
 
-    private void setUserInfoLogin(Intent data) {
-        if (data == null) {
-            return;
-        }
+    private void setInfoAfterRegisterUser(Intent data) {
+        if (data == null) { return; }
 
-        String pathImgProfile = data.getStringExtra("pathImgProfile");
-        String name = data.getStringExtra("name");
-        String login = data.getStringExtra("login");
-        String bornDate = data.getStringExtra("bornDate");
-        String city = data.getStringExtra("city");
+        EditText etLogin = findViewById(R.id.et_login);
+        EditText etPassword = findViewById(R.id.et_password);
 
-        // Isto não é seguro, mas por enquanto não tem autenticação via token logo deixar assim
-        String password = data.getStringExtra("password");
-
-        CurrentUser user = new CurrentUser(login, name, bornDate, city, password, pathImgProfile);
-
-        AppConfig.setCurrentUser(context, user);
+        etLogin.setText(data.getStringExtra("login"));
+        etPassword.setText(data.getStringExtra("password"));
     }
 
     private boolean validateUserLogin(String login, String password) {
@@ -97,15 +92,39 @@ public class LoginActivity extends BaseActivity {
             return false;
         }
 
-        CurrentUser user = AppConfig.getCurrentUser(context);
+        return true;
+    }
 
-        if (user.login.equals(login) && user.password.equals(password)) {
-            return true;
-        }
+    private void login(String login, String password) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
+            UserHttpRequest userRequest = new UserHttpRequest();
 
-        AlertMessageUtil.defaultAlert(context, "Login ou Senha incorretos!");
+            try {
+                JSONObject response = userRequest.login(login, password);
+                int status = response.getInt("status");
+                String message = response.getString("message");
+                String authToken = status == 0 ? response.getString("auth_token") : null;
 
-        return false;
+                runOnUiThread(() -> {
+                    AlertMessageUtil.defaultAlert(context, message);
+
+                    if (status == 0) {
+                        setUserInfoLogin(login, authToken);
+                        startPostActivity();
+                    }
+                });
+            } catch (IOException | JSONException e) {
+                runOnUiThread(() -> AlertMessageUtil.errorRequestAlert(context));
+            }
+        });
+    }
+
+    private void setUserInfoLogin(String login, String authToken) {
+        CurrentUser currentUser = new CurrentUser(login, authToken);
+
+        AppConfig.setCurrentUser(context, currentUser);
+        AppConfig.setLogin(context,true);
     }
 
     private void startPostActivity() {
@@ -120,7 +139,7 @@ public class LoginActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == NEW_USER_RESULT && resultCode == Activity.RESULT_OK) {
-            setUserInfoLogin(data);
+            setInfoAfterRegisterUser(data);
         }
     }
 
