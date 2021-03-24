@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.socialmedia.Models.Comment;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.DateTimeUtil;
+import com.example.socialmedia.Utils.ImageUtil;
 
 public class CommentViewHolder extends RecyclerView.ViewHolder {
 
@@ -30,7 +31,7 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Comment comment) {
-        this.userAvatarIv.setImageDrawable(comment.user.avatar);
+        this.userAvatarIv.setImageBitmap(ImageUtil.base64ToBitmap(comment.user.avatar));
         this.userNameIv.setText(comment.user.name);
         this.userLoginTv.setText(comment.user.login);
         this.descriptionTv.setText(comment.description);

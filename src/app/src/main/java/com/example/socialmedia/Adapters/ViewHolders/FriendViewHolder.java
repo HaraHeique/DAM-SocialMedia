@@ -40,7 +40,7 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(User user) {
-        this.userAvatarIv.setImageDrawable(user.avatar);
+        this.userAvatarIv.setImageBitmap(ImageUtil.base64ToBitmap(user.avatar));
         this.userFollowIv.setImageDrawable(this.getFollowingIcon(user.following));
         this.userLoginTv.setText(user.login);
         this.userNameAgeTv.setText(this.getNameAgeFormattedText(user));

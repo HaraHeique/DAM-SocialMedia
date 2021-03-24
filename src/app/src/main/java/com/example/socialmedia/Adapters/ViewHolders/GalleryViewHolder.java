@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
+import com.example.socialmedia.Utils.ImageUtil;
 
 public class GalleryViewHolder extends RecyclerView.ViewHolder {
 
@@ -20,6 +21,6 @@ public class GalleryViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Post post) {
-        this.imageIv.setImageDrawable(post.image);
+        this.imageIv.setImageBitmap(ImageUtil.base64ToBitmap(post.image));
     }
 }

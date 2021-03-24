@@ -16,6 +16,7 @@ import com.example.socialmedia.Utils.ImageUtil;
 import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
 import com.example.socialmedia.ViewModels.PostViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryActivity extends BaseActivity {
@@ -41,13 +42,14 @@ public class GalleryActivity extends BaseActivity {
     }
 
     private void setupPostViewModel() {
-        PostViewModelFactory postVMFactory = new PostViewModelFactory(context);
+        CurrentUser currentUser = AppConfig.getCurrentUser(context);
+        PostViewModelFactory postVMFactory = new PostViewModelFactory(currentUser);
         postViewModel = new ViewModelProvider(this, postVMFactory).get(PostViewModel.class);
     }
 
     private void setupGalleryAdapter() {
         CurrentUser currentUser = AppConfig.getCurrentUser(context);
-        List<Post> currentUserPosts = postViewModel.getImagePostsByLogin(currentUser.login);
+        List<Post> currentUserPosts = new ArrayList<>();//postViewModel.getImagePostsByLogin(currentUser.login);
         galleryAdapter = new GalleryAdapter(currentUserPosts);
     }
 

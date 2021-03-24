@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
+import com.example.socialmedia.Utils.ImageUtil;
 
 public class PostImageViewHolder extends PostViewHolder {
 
@@ -22,6 +23,6 @@ public class PostImageViewHolder extends PostViewHolder {
     public void bind(Post post) {
         super.bind(post);
 
-        this.postImageIv.setImageDrawable(post.image);
+        this.postImageIv.setImageBitmap(ImageUtil.base64ToBitmap(post.image));
     }
 }
