@@ -3,17 +3,12 @@ package com.example.socialmedia.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.socialmedia.Models.User;
@@ -24,12 +19,11 @@ import com.example.socialmedia.Utils.ImageUtil;
 import com.example.socialmedia.ViewModels.RegisterUserViewModel;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 
 public class RegisterUserActivity extends BaseActivity {
 
-    private static final int RESULT_TAKE_PICTURE = 1;
+    private static final int TAKE_PICTURE_RESULT = 1;
 
     private RegisterUserViewModel registerUserViewModel;
 
@@ -48,7 +42,9 @@ public class RegisterUserActivity extends BaseActivity {
     private void onClickPhotoPicker() {
         ImageView btnImg = findViewById(R.id.imv_newuser_imgprofile);
 
-        btnImg.setOnClickListener(v -> dispatchTakePictureIntent());
+        btnImg.setOnClickListener(v -> {
+            registerUserViewModel.avatarImagePath = takePictureIntent(TAKE_PICTURE_RESULT);
+        });
     }
 
     private void onClickBtnConfirmRegisterUser() {
@@ -68,32 +64,6 @@ public class RegisterUserActivity extends BaseActivity {
 
             registerUserViewModel.registerUser(registeredUser);
         });
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        File file = null;
-
-        try {
-            file = createImageFile();
-        } catch (IOException e) {
-            Toast.makeText(context, "Não foi possível criar o arquivo.", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        registerUserViewModel.avatarImagePath = file.getAbsolutePath();
-        String authority = this.getApplicationContext().getPackageName() + ".provider";
-        Uri fUri = FileProvider.getUriForFile(context, authority, file);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fUri);
-        startActivityForResult(intent, RESULT_TAKE_PICTURE);
-    }
-
-    private File createImageFile() throws IOException {
-        String filename = "perfil";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-        return File.createTempFile(filename, ".jpg", storageDir);
     }
 
     private void observeRegisterUser() {
@@ -119,15 +89,14 @@ public class RegisterUserActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_TAKE_PICTURE) {
-            if (resultCode == RESULT_OK) {
-                ImageView imageView = findViewById(R.id.imv_newuser_imgprofile);
-                Bitmap imgBitmap = ImageUtil.getBitmap(registerUserViewModel.avatarImagePath);
-                imgBitmap = ImageUtil.autoRotateImage(imgBitmap, registerUserViewModel.avatarImagePath);
-                imageView.setImageBitmap(imgBitmap);
-            } else {
-                new File(registerUserViewModel.avatarImagePath).delete();
-            }
+        if (requestCode == TAKE_PICTURE_RESULT && resultCode == RESULT_OK) {
+            ImageView imageView = findViewById(R.id.imv_newuser_imgprofile);
+            Bitmap imgBitmap = ImageUtil.getBitmap(registerUserViewModel.avatarImagePath);
+            imgBitmap = ImageUtil.autoRotateImage(imgBitmap, registerUserViewModel.avatarImagePath);
+            imageView.setImageBitmap(imgBitmap);
+        } else {
+            new File(registerUserViewModel.avatarImagePath).delete();
+            AlertMessageUtil.defaultAlert(context, "Não foi possível tirar a foto de perfil!");
         }
     }
 

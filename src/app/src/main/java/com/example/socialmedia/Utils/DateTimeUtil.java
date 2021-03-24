@@ -41,6 +41,10 @@ public final class DateTimeUtil {
         return defaultDateTimeFormatter.format(date);
     }
 
+    public static String ConvertToStrDateTime(Date date, String formatter) {
+        return new SimpleDateFormat(formatter).format(date);
+    }
+
     public static String ConvertToStrDate(Date date) {
         return defaultDateFormatter.format(date);
     }
