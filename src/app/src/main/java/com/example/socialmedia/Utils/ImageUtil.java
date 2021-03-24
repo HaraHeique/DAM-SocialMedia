@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 
 import java.io.File;
@@ -115,6 +116,13 @@ public final class ImageUtil {
         }
 
         return rotatedBitmap;
+    }
+
+    public static Bitmap base64ToBitmap(String imgData) {
+        imgData = imgData.substring(imgData.indexOf(",") + 1);
+        byte[] imageAsBytes = Base64.decode(imgData.getBytes(), Base64.DEFAULT);
+
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
     public static Drawable getDrawable(Resources resources, int drawableId) {
