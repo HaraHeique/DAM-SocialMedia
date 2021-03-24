@@ -6,19 +6,20 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.ViewModels.PostViewModel;
 
 public class PostViewModelFactory implements ViewModelProvider.Factory {
 
-    private final Context context;
+    private final CurrentUser currentUser;
 
-    public PostViewModelFactory(Context context) {
-        this.context = context;
+    public PostViewModelFactory(CurrentUser currentUser) {
+        this.currentUser = currentUser;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new PostViewModel(this.context);
+        return (T) new PostViewModel(this.currentUser);
     }
 }

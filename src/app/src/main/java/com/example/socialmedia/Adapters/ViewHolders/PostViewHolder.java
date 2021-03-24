@@ -22,7 +22,6 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
     private final Resources resources;
     private final Context context;
 
-    private final TextView titleTv;
     private final TextView descriptionTv;
     private final TextView dateCreatedTv;
     private final TextView userNameTv;
@@ -37,7 +36,6 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
         this.resources = itemView.getResources();
         this.context = itemView.getContext();
 
-        this.titleTv = itemView.findViewById(R.id.tv_timeline_title);
         this.descriptionTv = itemView.findViewById(R.id.tv_timeline_description);
         this.dateCreatedTv = itemView.findViewById(R.id.tv_timeline_data);
         this.userNameTv = itemView.findViewById(R.id.tv_timeline_name);
@@ -51,12 +49,11 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
         String formatDate = DateTimeUtil.ConvertToStrDateTime(post.createDate);
         CurrentUser currentUser = AppConfig.getCurrentUser(this.context);
 
-        this.titleTv.setText(post.title);
         this.descriptionTv.setText(post.description);
         this.dateCreatedTv.setText(formatDate);
         this.userNameTv.setText(post.user.name);
         this.userLoginTv.setText(post.user.login);
-        this.userAvatarTv.setImageDrawable(post.user.avatar);
+        this.userAvatarTv.setImageBitmap(ImageUtil.base64ToBitmap(post.user.avatar));
 
         if (currentUser.isLogged && !currentUser.login.equalsIgnoreCase(post.user.login)) {
             Drawable followingIcon = this.getFollowingIcon(post.user.following);

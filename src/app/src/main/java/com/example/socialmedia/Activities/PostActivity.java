@@ -13,14 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialmedia.Adapters.PostAdapter;
 import com.example.socialmedia.AppConfig;
+import com.example.socialmedia.Enums.TimelineType;
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
+import com.example.socialmedia.Utils.AlertMessageUtil;
 import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
 import com.example.socialmedia.ViewModels.PostViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class PostActivity extends BaseActivity {
 
@@ -36,45 +38,36 @@ public class PostActivity extends BaseActivity {
         setContentView(R.layout.activity_post);
 
         setToolbarConfig(R.id.tb_main, "Timeline", false);
-        //setupPostViewModel();
-        //postAdapter = new PostAdapter(postViewModel.getPostsList());
-        //setupRecyclerPostList();
-        //onClickIconsMenuBottom();
+        setupPostViewModel();
+        setupRecyclerPostList();
+        onClickIconsMenuBottom();
+        observePostsList();
+        postViewModel.getPostsList(TimelineType.ALL_WORLD);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        //filterPostsByCurrentUser();
-        //setVisibilityItemsMenu();
+        setVisibilityItemsMenu();
     }
 
     public void startCommentActivity(Post post) {
         Intent intent = new Intent(context, CommentActivity.class);
-        intent.putExtra("title", post.title);
         startActivity(intent);
     }
 
-    private void logout() {
-        AppConfig.setLogin(context, false);
-        Intent intent = new Intent(context, LoginActivity.class);
-        startActivity(intent);
+    private void setupPostViewModel() {
+        CurrentUser currentUser = AppConfig.getCurrentUser(context);
+        PostViewModelFactory postVMFactory = new PostViewModelFactory(currentUser);
+        postViewModel = new ViewModelProvider(this, postVMFactory).get(PostViewModel.class);
     }
 
-    private void onClickIconAddNewPost() {
-        Intent intent = new Intent(context, CreatePostActivity.class);
-        startActivityForResult(intent, CREATE_POST_RESULT);
-    }
-
-    private void onClickIconFriends() {
-        Intent intent = new Intent(context, FriendActivity.class);
-        startActivity(intent);
-    }
-
-    private void onClickIconGallery() {
-        Intent intent = new Intent(context, GalleryActivity.class);
-        startActivity(intent);
+    private void setupRecyclerPostList() {
+        postAdapter = new PostAdapter(new ArrayList<>());
+        RecyclerView postRecycleList = findViewById(R.id.rv_posts);
+        postRecycleList.setLayoutManager(new LinearLayoutManager(context));
+        postRecycleList.setAdapter(postAdapter);
     }
 
     private void onClickIconsMenuBottom() {
@@ -84,21 +77,17 @@ public class PostActivity extends BaseActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.op_allworld) {
-                List<Post> allWordList = postViewModel.getPostsList();
-                postAdapter.updatePostList(allWordList);
+                postViewModel.getPostsList(TimelineType.ALL_WORLD);
                 return true;
             }
 
             if (itemId == R.id.op_myworld) {
-                List<Post> myWordList = postViewModel.getPostsByFollow(true);
-                postAdapter.updatePostList(myWordList);
+                postViewModel.getPostsList(TimelineType.MY_WORLD);
                 return true;
             }
 
             if (itemId == R.id.op_onlyme) {
-                CurrentUser currentUser = AppConfig.getCurrentUser(context);
-                List<Post> onlyMeList = postViewModel.getPostsByLogin(currentUser.login);
-                postAdapter.updatePostList(onlyMeList);
+                postViewModel.getPostsList(TimelineType.ONLY_ME);;
                 return true;
             }
 
@@ -106,15 +95,14 @@ public class PostActivity extends BaseActivity {
         });
     }
 
-    private void setupPostViewModel() {
-        PostViewModelFactory postVMFactory = new PostViewModelFactory(context);
-        postViewModel = new ViewModelProvider(this, postVMFactory).get(PostViewModel.class);
-    }
-
-    private void setupRecyclerPostList() {
-        RecyclerView postRecycleList = findViewById(R.id.rv_posts);
-        postRecycleList.setAdapter(postAdapter);
-        postRecycleList.setLayoutManager(new LinearLayoutManager(context));
+    private void observePostsList() {
+        postViewModel.observePostList().observe(this, objResponse -> {
+            if (objResponse.success) {
+                postAdapter.updatePostList(objResponse.data);
+            } else {
+                AlertMessageUtil.defaultAlert(context, objResponse.message);
+            }
+        });
     }
 
     private void setVisibilityItemsMenu() {
@@ -158,23 +146,25 @@ public class PostActivity extends BaseActivity {
         }
     }
 
-    private void filterPostsByCurrentUser() {
-        CurrentUser currentUser = AppConfig.getCurrentUser(context);
-
-        if (!currentUser.isLogged) {
-            postAdapter.updatePostList(postViewModel.getPostsNotLogin(currentUser.login));
-        } else {
-            postAdapter.updatePostList(postViewModel.getPostsList());
-        }
+    private void logout() {
+        AppConfig.setLogin(context, false);
+        Intent intent = new Intent(context, LoginActivity.class);
+        startActivity(intent);
     }
 
-    private boolean checkPermissionInPage() {
-        if (!AppConfig.isLogged(context)) {
-            logout();
-            return false;
-        }
+    private void onClickIconAddNewPost() {
+        Intent intent = new Intent(context, CreatePostActivity.class);
+        startActivityForResult(intent, CREATE_POST_RESULT);
+    }
 
-        return true;
+    private void onClickIconFriends() {
+        Intent intent = new Intent(context, FriendActivity.class);
+        startActivity(intent);
+    }
+
+    private void onClickIconGallery() {
+        Intent intent = new Intent(context, GalleryActivity.class);
+        startActivity(intent);
     }
 
     @Override
