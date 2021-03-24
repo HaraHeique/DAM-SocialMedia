@@ -1,47 +1,37 @@
 package com.example.socialmedia.Models;
 
-import android.graphics.drawable.Drawable;
-
 import java.util.Date;
 
 public class User {
 
+    public String login; // PK
     public String name;
-    public String login;
     public String password;
     public Date bornDate;
     public String city;
-    public boolean following; // Atributo para facilitar nos mocks (usuário corrente segue este usuário)
-    public Drawable avatar;
-    public String avatarPath;
+    public boolean following;
+    public String avatar; // Imagem de perfil
     public String appToken;
     public String authToken;
 
-    public User(String name, String login, Date bornDate, String city, boolean following, Drawable avatar) {
+    public User(String name, String login, boolean following, String avatar) {
         this.name = name;
         this.login = login;
-        this.bornDate = bornDate;
-        this.city = city;
         this.following = following;
         this.avatar = avatar;
     }
 
-    public User(String name, String login, String password, Date bornDate, String city, String appToken, String authToken) {
+    public User(String name, String login, String password, Date bornDate, String city) {
         this.name = name;
         this.login = login;
         this.password = password;
         this.bornDate = bornDate;
         this.city = city;
-        this.appToken = appToken;
-        this.authToken = authToken;
     }
 
-    public User(String name, String login, String password, Date bornDate, String city, String avatarPath) {
-        this.name = name;
+    public User(String login, String password, String authToken) {
         this.login = login;
         this.password = password;
-        this.bornDate = bornDate;
-        this.city = city;
-        this.avatarPath = avatarPath;
+        this.authToken = authToken;
     }
 }

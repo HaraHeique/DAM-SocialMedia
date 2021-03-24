@@ -177,12 +177,11 @@ public class HttpRequest {
 
     // Retorna um objeto complexo pegando campos comuns da resposta proveniente do servidor
     public <TObject> ObjectResponse<TObject> getCommonObject(String response) throws JSONException {
-        ObjectResponse<TObject> objResponse = new ObjectResponse<>();
+        JSONObject jsonObject = new JSONObject(response);
+        int status = jsonObject.getInt("status");
+        String message = jsonObject.getString("message");
+        boolean success = status == 0;
 
-        objResponse.jsonObject = new JSONObject(response);
-        objResponse.message = objResponse.jsonObject.getString("message");
-        objResponse.success = objResponse.jsonObject.getInt("status") == 0;
-
-        return objResponse;
+        return new ObjectResponse<TObject>(jsonObject, success, message);
     }
 }

@@ -14,28 +14,24 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.socialmedia.HttpRequests.ObjectResponse;
-import com.example.socialmedia.HttpRequests.UserHttpRequest;
 import com.example.socialmedia.Models.User;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
 import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
-
-import org.json.JSONException;
+import com.example.socialmedia.ViewModels.RegisterUserViewModel;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class RegisterUserActivity extends BaseActivity {
 
     private static final int RESULT_TAKE_PICTURE = 1;
 
-    private String currentPhotoPath;
+    private RegisterUserViewModel registerUserViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +41,8 @@ public class RegisterUserActivity extends BaseActivity {
         setToolbarConfig(R.id.tb_register_user, "Novo Usuário", true);
         onClickPhotoPicker();
         onClickBtnConfirmRegisterUser();
+        registerUserViewModel = new ViewModelProvider(this).get(RegisterUserViewModel.class);
+        observeRegisterUser();
     }
 
     private void onClickPhotoPicker() {
@@ -63,13 +61,12 @@ public class RegisterUserActivity extends BaseActivity {
                 ((EditText)findViewById(R.id.et_newuser_login)).getText().toString(),
                 ((EditText)findViewById(R.id.et_newuser_password)).getText().toString(),
                 DateTimeUtil.ConvertToDate(((EditText)findViewById(R.id.et_newuser_borndate)).getText().toString()),
-                ((EditText)findViewById(R.id.et_newuser_city)).getText().toString(),
-                currentPhotoPath
+                ((EditText)findViewById(R.id.et_newuser_city)).getText().toString()
             );
 
             if (!ValidateRegisterUser(registeredUser, confirmPassword)) { return; }
 
-            registerUser(registeredUser);
+            registerUserViewModel.registerUser(registeredUser);
         });
     }
 
@@ -85,7 +82,7 @@ public class RegisterUserActivity extends BaseActivity {
             return;
         }
 
-        currentPhotoPath = file.getAbsolutePath();
+        registerUserViewModel.avatarImagePath = file.getAbsolutePath();
         String authority = this.getApplicationContext().getPackageName() + ".provider";
         Uri fUri = FileProvider.getUriForFile(context, authority, file);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fUri);
@@ -99,23 +96,12 @@ public class RegisterUserActivity extends BaseActivity {
         return File.createTempFile(filename, ".jpg", storageDir);
     }
 
-    private void registerUser(User user) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> {
-            UserHttpRequest userRequest = new UserHttpRequest();
+    private void observeRegisterUser() {
+        registerUserViewModel.observeUserRegistered().observe(this, objResponse -> {
+            AlertMessageUtil.defaultAlert(context, objResponse.message);
 
-            try {
-                ObjectResponse<User> response = userRequest.register(user);
-
-                runOnUiThread(() -> {
-                    AlertMessageUtil.defaultAlert(context, response.message);
-
-                    if (response.success) {
-                        finishActivityWithResult(response.data);
-                    }
-                });
-            } catch (IOException | JSONException e) {
-                runOnUiThread(() -> AlertMessageUtil.errorRequestAlert(context));
+            if (objResponse.success) {
+                finishActivityWithResult(objResponse.data);
             }
         });
     }
@@ -136,11 +122,11 @@ public class RegisterUserActivity extends BaseActivity {
         if (requestCode == RESULT_TAKE_PICTURE) {
             if (resultCode == RESULT_OK) {
                 ImageView imageView = findViewById(R.id.imv_newuser_imgprofile);
-                Bitmap imgBitmap = ImageUtil.getBitmap(currentPhotoPath);
-                imgBitmap = ImageUtil.autoRotateImage(imgBitmap, currentPhotoPath);
+                Bitmap imgBitmap = ImageUtil.getBitmap(registerUserViewModel.avatarImagePath);
+                imgBitmap = ImageUtil.autoRotateImage(imgBitmap, registerUserViewModel.avatarImagePath);
                 imageView.setImageBitmap(imgBitmap);
             } else {
-                new File(currentPhotoPath).delete();
+                new File(registerUserViewModel.avatarImagePath).delete();
             }
         }
     }
@@ -150,7 +136,7 @@ public class RegisterUserActivity extends BaseActivity {
         if (!ValidateLogin(user.login) || !ValidatePassword(user.password) ||
             !ValidateConfirmPassword(user.password, confirmPassword) || !ValidateName(user.name) ||
             !ValidateBornDate(user.bornDate) || !ValidateCity(user.city) ||
-            !ValidateImage(user.avatarPath)) {
+            !ValidateImage(registerUserViewModel.avatarImagePath)) {
             return false;
         }
 

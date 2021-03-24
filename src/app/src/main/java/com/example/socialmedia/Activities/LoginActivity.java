@@ -14,27 +14,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.socialmedia.AppConfig;
-import com.example.socialmedia.HttpRequests.ObjectResponse;
-import com.example.socialmedia.HttpRequests.UserHttpRequest;
 import com.example.socialmedia.Models.CurrentUser;
+import com.example.socialmedia.Models.User;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
+import com.example.socialmedia.ViewModels.LoginViewModel;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class LoginActivity extends BaseActivity {
 
     private static final int NEW_USER_RESULT = 1;
     private static final int RESULT_REQUEST_PERMISSION = 200;
+
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +42,8 @@ public class LoginActivity extends BaseActivity {
         hideActionBar();
         onBtnClickRegisterNewUser();
         onBtnClickLogin();
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        observeLogin();
         askForPermissions(Collections.singletonList(Manifest.permission.CAMERA));
     }
 
@@ -72,7 +72,7 @@ public class LoginActivity extends BaseActivity {
 
             if (!validateUserLogin(login, password)) { return; }
 
-            login(login, password);
+            loginViewModel.login(login, password);
         });
     }
 
@@ -85,30 +85,19 @@ public class LoginActivity extends BaseActivity {
         return true;
     }
 
-    private void login(String login, String password) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> {
-            UserHttpRequest userRequest = new UserHttpRequest();
+    private void observeLogin() {
+        loginViewModel.observeLogin().observe(this, objResponse -> {
+            AlertMessageUtil.defaultAlert(context, objResponse.message);
 
-            try {
-                ObjectResponse<String> response = userRequest.login(login, password);
-
-                runOnUiThread(() -> {
-                    AlertMessageUtil.defaultAlert(context, response.message);
-
-                    if (response.success) {
-                        setUserInfoLogin(login, response.data);
-                        startPostActivity();
-                    }
-                });
-            } catch (IOException | JSONException e) {
-                runOnUiThread(() -> AlertMessageUtil.errorRequestAlert(context));
+            if (objResponse.success) {
+                setUserInfoLogin(objResponse.data);
+                startPostActivity();
             }
         });
     }
 
-    private void setUserInfoLogin(String login, String authToken) {
-        CurrentUser currentUser = new CurrentUser(login, authToken);
+    private void setUserInfoLogin(User user) {
+        CurrentUser currentUser = new CurrentUser(user.login, user.authToken);
 
         AppConfig.setCurrentUser(context, currentUser);
         AppConfig.setLogin(context,true);
