@@ -35,6 +35,11 @@ public class User {
         this.authToken = authToken;
     }
 
+    public User(String name, String avatar) {
+        this.name = name;
+        this.avatar = avatar;
+    }
+
     public User(CurrentUser currentUser) {
         this.login = currentUser.login;
         this.authToken = currentUser.authToken;

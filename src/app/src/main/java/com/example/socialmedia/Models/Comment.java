@@ -12,9 +12,17 @@ public class Comment {
     public User user;
     public Post post;
 
-    public Comment(String description, User user) {
+    public Comment(String id, String description, Date createDate, User user, Post post) {
+        this.id = id;
         this.description = description;
-        this.createDate = new Date();
+        this.createDate = createDate;
         this.user = user;
+        this.post = post;
+    }
+
+    public Comment(String description, User user, Post post) {
+        this.description = description;
+        this.user = user;
+        this.post = post;
     }
 }

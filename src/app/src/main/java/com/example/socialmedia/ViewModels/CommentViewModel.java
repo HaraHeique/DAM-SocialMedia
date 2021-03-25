@@ -1,38 +1,55 @@
 package com.example.socialmedia.ViewModels;
 
-import android.content.Context;
-import android.content.res.Resources;
-
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.socialmedia.AppConfig;
+import com.example.socialmedia.HttpRequests.CommentHttpRequest;
+import com.example.socialmedia.HttpRequests.ObjectResponse;
 import com.example.socialmedia.Models.Comment;
-import com.example.socialmedia.Models.CurrentUser;
-import com.example.socialmedia.Models.User;
-import com.example.socialmedia.R;
-import com.example.socialmedia.Utils.DateTimeUtil;
-import com.example.socialmedia.Utils.ImageUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class CommentViewModel extends ViewModel {
 
-    private final List<Comment> commentsList;
+    public String postId;
 
-    public CommentViewModel(Context context) {
-        this.commentsList = mockData(context);
+    private final MutableLiveData<ObjectResponse<List<Comment>>> postCommentsList;
+    private final MutableLiveData<ObjectResponse<Comment>> addComment;
+
+    public CommentViewModel() {
+        this.postCommentsList = new MutableLiveData<>();
+        this.addComment = new MutableLiveData<>();
+        this.postId = "";
     }
 
-    public List<Comment> getCommentsList() {
-        return commentsList;
+    // Observes (LiveData)
+    public LiveData<ObjectResponse<List<Comment>>> observePostCommentsList() {
+        return this.postCommentsList;
     }
 
-    private List<Comment> mockData(Context context) {
-        Resources resources = context.getResources();
-        CurrentUser currentUser = AppConfig.getCurrentUser(context);
+    public LiveData<ObjectResponse<Comment>> observeAddComment() {
+        return this.addComment;
+    }
 
-        return new ArrayList<>();
+    // Requests
+    public void getComments(String postId) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
+            CommentHttpRequest commentRequest = CommentHttpRequest.getInstance();
+            ObjectResponse<List<Comment>> objResponse = commentRequest.getComments(postId);
+            this.postCommentsList.postValue(objResponse);
+        });
+    }
+
+    public void addComment(Comment comment) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
+            CommentHttpRequest commentRequest = CommentHttpRequest.getInstance();
+            ObjectResponse<Comment> objResponse = commentRequest.addComment(comment);
+            this.addComment.postValue(objResponse);
+        });
     }
 }

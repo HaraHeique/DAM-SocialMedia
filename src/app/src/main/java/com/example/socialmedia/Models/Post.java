@@ -15,6 +15,10 @@ public class Post {
     // Relation
     public User user;
 
+    public Post(String id) {
+        this.id = id;
+    }
+
     public Post(String description, User user) {
         this.description = description;
         this.createDate = new Date();

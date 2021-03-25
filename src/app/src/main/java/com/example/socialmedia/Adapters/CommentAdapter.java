@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
 
-    private final List<Comment> comments;
+    private List<Comment> comments;
 
     public CommentAdapter(List<Comment> comments) {
         this.comments = comments;
@@ -39,5 +39,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
     @Override
     public int getItemCount() {
         return this.comments.size();
+    }
+
+    public void updateCommentList(List<Comment> commentsList) {
+        this.comments = commentsList;
+        notifyDataSetChanged();
     }
 }
