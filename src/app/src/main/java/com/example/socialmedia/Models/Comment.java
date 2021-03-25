@@ -4,11 +4,13 @@ import java.util.Date;
 
 public class Comment {
 
+    public String id;
     public String description;
     public Date createDate;
 
-    // Relation
+    // Relations
     public User user;
+    public Post post;
 
     public Comment(String description, User user) {
         this.description = description;

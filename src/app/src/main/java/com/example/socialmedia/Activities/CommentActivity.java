@@ -22,7 +22,7 @@ public class CommentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
 
-        setToolbarConfig();
+        setToolbarConfig(R.id.tb_comment, "Comentários do Post", true);
         setupCommentViewModel();
         commentAdapter = new CommentAdapter(commentViewModel.getCommentsList());
         setupRecyclerCommentsList();
@@ -30,8 +30,7 @@ public class CommentActivity extends BaseActivity {
 
     private void setToolbarConfig() {
         Intent intent = getIntent();
-        String title = intent.getStringExtra("title");
-        setToolbarConfig(R.id.tb_comment, title, true);
+        String postId = intent.getStringExtra("postId");
     }
 
     private void setupCommentViewModel() {

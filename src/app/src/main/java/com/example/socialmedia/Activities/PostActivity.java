@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +16,6 @@ import com.example.socialmedia.Adapters.PostAdapter;
 import com.example.socialmedia.AppConfig;
 import com.example.socialmedia.Enums.TimelineType;
 import com.example.socialmedia.Models.CurrentUser;
-import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.Models.User;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
@@ -56,8 +54,9 @@ public class PostActivity extends BaseActivity {
         setVisibilityItemsMenu();
     }
 
-    public void startCommentActivity() {
+    public void startCommentActivity(String id) {
         Intent intent = new Intent(context, CommentActivity.class);
+        intent.putExtra("postId", id);
         startActivity(intent);
     }
 
