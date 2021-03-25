@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,8 @@ import com.example.socialmedia.Adapters.PostAdapter;
 import com.example.socialmedia.AppConfig;
 import com.example.socialmedia.Enums.TimelineType;
 import com.example.socialmedia.Models.CurrentUser;
+import com.example.socialmedia.Models.Post;
+import com.example.socialmedia.Models.User;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
 import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
@@ -42,6 +45,7 @@ public class PostActivity extends BaseActivity {
         setupRecyclerPostList();
         onClickIconsMenuBottom();
         observePostsList();
+        observeUserFollowState();
         postViewModel.getPostsList(postViewModel.timelineType);
     }
 
@@ -55,6 +59,12 @@ public class PostActivity extends BaseActivity {
     public void startCommentActivity() {
         Intent intent = new Intent(context, CommentActivity.class);
         startActivity(intent);
+    }
+
+    public void changeStateFollow(String who, boolean following) {
+        User user = new User(AppConfig.getCurrentUser(context));
+        postViewModel.pressFollowButton = following;
+        postViewModel.changeFollowState(user, who, following);
     }
 
     private void setupPostViewModel() {
@@ -98,6 +108,18 @@ public class PostActivity extends BaseActivity {
         postViewModel.observePostList().observe(this, objResponse -> {
             if (objResponse.success) {
                 postAdapter.updatePostList(objResponse.data);
+            } else {
+                AlertMessageUtil.defaultAlert(context, objResponse.message);
+            }
+        });
+    }
+
+    private void observeUserFollowState() {
+        postViewModel.observeUserFollowState().observe(this, objResponse -> {
+            if (objResponse.success) {
+                postViewModel.getPostsList(postViewModel.timelineType);
+                String message = postViewModel.pressFollowButton ? "Usuário seguido." : "Usuário deixado de seguir.";
+                AlertMessageUtil.defaultAlert(context, message);
             } else {
                 AlertMessageUtil.defaultAlert(context, objResponse.message);
             }

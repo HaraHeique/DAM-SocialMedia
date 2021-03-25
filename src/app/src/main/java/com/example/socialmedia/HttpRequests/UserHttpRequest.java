@@ -70,7 +70,40 @@ public class UserHttpRequest {
         return objResponse;
     }
 
-    public User getUserLogin(ObjectResponse<User> objResponse, String login, String password) throws JSONException {
+    public ObjectResponse<User> follow(User user, String whoToFollow) {
+        return sendRequestFollowChangeState(user, whoToFollow, true);
+    }
+
+    public ObjectResponse<User> unfollow(User user, String whoToUnfollow) {
+        return sendRequestFollowChangeState(user, whoToUnfollow, false);
+    }
+
+    private ObjectResponse<User> sendRequestFollowChangeState(User user, String who, boolean following) {
+        String baseUrl = AppConfig.BASE_URL;
+        String requestUrl = following ? baseUrl + "seguir.php" : baseUrl + "desfazer_seguir.php";
+
+        HttpRequest httpRequest = new HttpRequest(requestUrl, "POST", "UTF-8");
+        httpRequest.addParam("login", user.login);
+        httpRequest.addParam("auth_token", user.authToken);
+        httpRequest.addParam("quem", who);
+
+        ObjectResponse<User> objResponse;
+
+        try {
+            InputStream inputStream = httpRequest.execute();
+            String response = httpRequest.getResponseString(inputStream, "UTF-8");
+            httpRequest.finish();
+
+            objResponse = httpRequest.getCommonObject(response);
+            objResponse.setData(user);
+        } catch (IOException | JSONException e) {
+            objResponse = new ObjectResponse<>(e);
+        }
+
+        return objResponse;
+    }
+
+    private User getUserLogin(ObjectResponse<User> objResponse, String login, String password) throws JSONException {
         if (!objResponse.success) { return null; }
 
         String authToken = objResponse.jsonObject.getString("auth_token");

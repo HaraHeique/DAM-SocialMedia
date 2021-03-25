@@ -47,7 +47,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post post = this.posts.get(position);
         holder.bind(post);
-        this.onClickBtnComment(holder.itemView);
+        this.onClickBtnIconFollow(holder.itemView, post.user.login);
+        this.onClickBtnIconComment(holder.itemView);
     }
 
     @Override
@@ -65,7 +66,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         notifyDataSetChanged();
     }
 
-    private void onClickBtnComment(View itemView) {
+    private void onClickBtnIconFollow(View itemView, String who) {
+        ImageView btnFollow = itemView.findViewById(R.id.imv_timeline_follow);
+        Object btnFollowTag = btnFollow.getTag();
+
+        if (btnFollowTag != null) {
+            boolean following = (Boolean)btnFollowTag;
+            btnFollow.setOnClickListener(v -> ((PostActivity)v.getContext()).changeStateFollow(who, following));
+        }
+    }
+
+    private void onClickBtnIconComment(View itemView) {
         ImageView btnComment = itemView.findViewById(R.id.imv_timeline_comment);
         btnComment.setOnClickListener(v -> ((PostActivity)v.getContext()).startCommentActivity());
     }

@@ -56,7 +56,7 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
         this.userAvatarTv.setImageBitmap(ImageUtil.base64ToBitmap(post.user.avatar));
 
         if (currentUser.isLogged && !currentUser.login.equalsIgnoreCase(post.user.login)) {
-            Drawable followingIcon = this.getFollowingIcon(post.user.following);
+            Drawable followingIcon = this.getFollowingIcon(this.followingIv, post.user.following);
             this.followingIv.setImageDrawable(followingIcon);
             followingIv.setVisibility(View.VISIBLE);
         } else {
@@ -68,11 +68,14 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private Drawable getFollowingIcon(boolean following) {
+    // Obtém a imagem e define a tag para saber qual das imagens está sendo clicada
+    private Drawable getFollowingIcon(View itemView, boolean following) {
         if (!following) {
+            itemView.setTag(true);
             return ImageUtil.getDrawable(this.resources, R.drawable.ic_baseline_person_add_24);
         }
 
+        itemView.setTag(false);
         return ImageUtil.getDrawable(this.resources, R.drawable.ic_baseline_person_add_disabled_24);
     }
 }
