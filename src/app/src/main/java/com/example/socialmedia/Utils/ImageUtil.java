@@ -80,6 +80,18 @@ public final class ImageUtil {
         return BitmapFactory.decodeStream(is, null, bmOptions);
     }
 
+    public static Bitmap getBitmap(String imagePath, int w, int h, boolean autoRotate) {
+        Bitmap image = getBitmap(imagePath, w, h);
+
+        return autoRotate ? autoRotateImage(image, imagePath) : image;
+    }
+
+    public static Bitmap getBitmap(String imagePath, boolean autoRotate) {
+        Bitmap image = getBitmap(imagePath);
+
+        return autoRotate ? autoRotateImage(image, imagePath) : image;
+    }
+
     public static Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
