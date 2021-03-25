@@ -34,4 +34,10 @@ public class User {
         this.password = password;
         this.authToken = authToken;
     }
+
+    public User(CurrentUser currentUser) {
+        this.login = currentUser.login;
+        this.authToken = currentUser.authToken;
+        this.appToken = currentUser.appToken;
+    }
 }

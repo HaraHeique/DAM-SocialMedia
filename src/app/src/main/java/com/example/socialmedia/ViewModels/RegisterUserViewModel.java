@@ -1,5 +1,7 @@
 package com.example.socialmedia.ViewModels;
 
+import android.graphics.Bitmap;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -32,12 +34,13 @@ public class RegisterUserViewModel extends ViewModel {
     // Requests
     public void registerUser(User user) {
         // Reduzir a escala da imagem para evitar timeout na request
-        File avatar = ImageUtil.getImageFile(this.avatarImagePath, 100, 100);
+        Bitmap imgBitmap = ImageUtil.getBitmap(this.avatarImagePath, 100, 100, true);
+        File avatarImage = ImageUtil.getImageFile(this.avatarImagePath, imgBitmap);
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             UserHttpRequest userRequest = UserHttpRequest.getInstance();
-            ObjectResponse<User> objResponse = userRequest.register(user, avatar);
+            ObjectResponse<User> objResponse = userRequest.register(user, avatarImage);
             this.userRegistered.postValue(objResponse);
         });
     }

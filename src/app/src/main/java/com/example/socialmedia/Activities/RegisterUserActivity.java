@@ -91,12 +91,10 @@ public class RegisterUserActivity extends BaseActivity {
 
         if (requestCode == TAKE_PICTURE_RESULT && resultCode == RESULT_OK) {
             ImageView imageView = findViewById(R.id.imv_newuser_imgprofile);
-            Bitmap imgBitmap = ImageUtil.getBitmap(registerUserViewModel.avatarImagePath);
-            imgBitmap = ImageUtil.autoRotateImage(imgBitmap, registerUserViewModel.avatarImagePath);
+            Bitmap imgBitmap = ImageUtil.getBitmap(registerUserViewModel.avatarImagePath, true);
             imageView.setImageBitmap(imgBitmap);
         } else {
             new File(registerUserViewModel.avatarImagePath).delete();
-            AlertMessageUtil.defaultAlert(context, "Não foi possível tirar a foto de perfil!");
         }
     }
 
