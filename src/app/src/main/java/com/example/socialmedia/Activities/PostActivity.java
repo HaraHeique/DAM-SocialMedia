@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +16,6 @@ import com.example.socialmedia.Adapters.PostAdapter;
 import com.example.socialmedia.AppConfig;
 import com.example.socialmedia.Enums.TimelineType;
 import com.example.socialmedia.Models.CurrentUser;
-import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
 import com.example.socialmedia.Utils.AlertMessageUtil;
 import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
@@ -42,7 +42,7 @@ public class PostActivity extends BaseActivity {
         setupRecyclerPostList();
         onClickIconsMenuBottom();
         observePostsList();
-        postViewModel.getPostsList(TimelineType.ALL_WORLD);
+        postViewModel.getPostsList(postViewModel.timelineType);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PostActivity extends BaseActivity {
         setVisibilityItemsMenu();
     }
 
-    public void startCommentActivity(Post post) {
+    public void startCommentActivity() {
         Intent intent = new Intent(context, CommentActivity.class);
         startActivity(intent);
     }
@@ -77,21 +77,20 @@ public class PostActivity extends BaseActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.op_allworld) {
-                postViewModel.getPostsList(TimelineType.ALL_WORLD);
-                return true;
+                postViewModel.timelineType = TimelineType.ALL_WORLD;
             }
 
             if (itemId == R.id.op_myworld) {
-                postViewModel.getPostsList(TimelineType.MY_WORLD);
-                return true;
+                postViewModel.timelineType = TimelineType.MY_WORLD;
             }
 
             if (itemId == R.id.op_onlyme) {
-                postViewModel.getPostsList(TimelineType.ONLY_ME);;
-                return true;
+                postViewModel.timelineType = TimelineType.ONLY_ME;
             }
 
-            return false;
+            postViewModel.getPostsList(postViewModel.timelineType);
+
+            return true;
         });
     }
 
@@ -204,5 +203,14 @@ public class PostActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CREATE_POST_RESULT && resultCode == RESULT_OK) {
+            postViewModel.getPostsList(postViewModel.timelineType);
+        }
     }
 }

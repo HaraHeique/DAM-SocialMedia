@@ -46,23 +46,6 @@
                 tools:srcCompat="@drawable/ic_baseline_add_a_photo_24" />
 
             <EditText
-                android:id="@+id/et_createpost_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="8dp"
-                android:autofillHints=""
-                android:backgroundTint="@android:color/white"
-                android:ems="10"
-                android:hint="@string/hint_post_title"
-                android:inputType="textPersonName"
-                android:textColor="@color/white" />
-
-            <EditText
                 android:id="@+id/et_createpost_description"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"

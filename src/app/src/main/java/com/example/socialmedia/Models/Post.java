@@ -15,11 +15,9 @@ public class Post {
     // Relation
     public User user;
 
-    public Post(String description, String image, PostType type, User user) {
+    public Post(String description, User user) {
         this.description = description;
-        this.image = image;
         this.createDate = new Date();
-        this.type = type;
         this.user = user;
     }
 

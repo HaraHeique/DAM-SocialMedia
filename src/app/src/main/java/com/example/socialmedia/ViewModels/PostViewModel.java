@@ -16,12 +16,15 @@ import java.util.concurrent.Executors;
 
 public class PostViewModel extends ViewModel {
 
+    public TimelineType timelineType;
+
     private final CurrentUser currentUser;
     private final MutableLiveData<ObjectResponse<List<Post>>> postsList;
 
     public PostViewModel(CurrentUser currentUser) {
         this.currentUser = currentUser;
         this.postsList = new MutableLiveData<>();
+        this.timelineType = TimelineType.ALL_WORLD;
     }
 
     // Observes (LiveData)
