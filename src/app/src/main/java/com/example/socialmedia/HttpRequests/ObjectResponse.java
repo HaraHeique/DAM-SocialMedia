@@ -16,7 +16,7 @@ public class ObjectResponse<TObject> {
 
     public ObjectResponse(Exception exception) {
         this.success = false;
-        this.message = exception.getMessage();
+        this.message = "Erro ao comunicar com o servidor.";
     }
 
     public ObjectResponse(TObject data, JSONObject jsonObject, String message) {
