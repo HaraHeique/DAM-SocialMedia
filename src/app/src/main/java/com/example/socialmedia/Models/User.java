@@ -2,7 +2,7 @@ package com.example.socialmedia.Models;
 
 import java.util.Date;
 
-public class User {
+public class User implements Comparable<User> {
 
     public String login; // PK
     public String name;
@@ -63,5 +63,10 @@ public class User {
         User user = (User) o;
 
         return this.login.equals(user.login);
+    }
+
+    @Override
+    public int compareTo(User user) {
+        return this.login.compareTo(user.login);
     }
 }

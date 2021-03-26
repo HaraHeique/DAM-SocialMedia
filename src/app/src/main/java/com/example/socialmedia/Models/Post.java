@@ -4,7 +4,7 @@ import com.example.socialmedia.Enums.PostType;
 
 import java.util.Date;
 
-public class Post {
+public class Post implements Comparable<Post> {
 
     public String id;
     public String description;
@@ -21,8 +21,8 @@ public class Post {
 
     public Post(String description, User user) {
         this.description = description;
-        this.createDate = new Date();
         this.user = user;
+        this.createDate = new Date();
     }
 
     public Post(String id, String description, Date createDate, String image, User user) {
@@ -32,5 +32,10 @@ public class Post {
         this.image = image;
         this.type = image.isEmpty() ? PostType.COMMENT : PostType.IMAGE;
         this.user = user;
+    }
+
+    @Override
+    public int compareTo(Post post) {
+        return this.createDate.compareTo(post.createDate);
     }
 }

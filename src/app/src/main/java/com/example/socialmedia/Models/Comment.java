@@ -2,7 +2,7 @@ package com.example.socialmedia.Models;
 
 import java.util.Date;
 
-public class Comment {
+public class Comment implements Comparable<Comment> {
 
     public String id;
     public String description;
@@ -24,5 +24,11 @@ public class Comment {
         this.description = description;
         this.user = user;
         this.post = post;
+        this.createDate = new Date();
+    }
+
+    @Override
+    public int compareTo(Comment comment) {
+        return this.createDate.compareTo(comment.createDate);
     }
 }
