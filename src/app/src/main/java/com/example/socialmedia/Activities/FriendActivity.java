@@ -99,10 +99,9 @@ public class FriendActivity extends BaseActivity {
         onSearchQueryEvent(searchItem);
 
         // Mudança nas cores dos icones do search view
-        setColorItemView(searchItem.getActionView(), Color.WHITE);
         SearchView searchView = (SearchView) searchItem.getActionView();
-        ImageView closeButtonImage = searchView.findViewById(R.id.search_close_btn);
-        closeButtonImage.setImageResource(R.drawable.ic_baseline_close_24);
+        setColorItemView(searchView, Color.WHITE);
+        setBtnSearchClose(searchView);
 
         return true;
     }

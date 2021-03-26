@@ -66,7 +66,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendViewHolder> implem
 
                     for (int i = 0; i < usersAll.size(); i++) {
                         User item = usersAll.get(i);
-                        if (item.name.contains(charSequence) || item.login.contains(charSequence)) {
+                        String nameCompare = item.name.toLowerCase();
+                        String loginCompare = item.login.toLowerCase();
+
+                        if (nameCompare.contains(charSequence) || loginCompare.contains(charSequence)) {
                             filteredList.add(item);
                         }
                     }

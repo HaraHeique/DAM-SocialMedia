@@ -10,12 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -69,6 +71,14 @@ public abstract class BaseActivity extends AppCompatActivity {
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
                 setColorItemView(viewGroup.getChildAt(i), colorValue);
             }
+        }
+    }
+
+    protected void setBtnSearchClose(SearchView searchView) {
+        ImageView closeButtonImage = searchView.findViewById(R.id.search_close_btn);
+
+        if (closeButtonImage != null) {
+            closeButtonImage.setImageResource(R.drawable.ic_baseline_close_24);
         }
     }
 
