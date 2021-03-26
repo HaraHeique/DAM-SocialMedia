@@ -17,6 +17,7 @@ import com.example.socialmedia.Enums.PostType;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
 
+import java.util.Collections;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
@@ -63,6 +64,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     public void updatePostList(List<Post> posts) {
         this.posts = posts;
+        notifyPostsListChanged();
+    }
+
+    public void notifyPostsListChanged() {
+        Collections.sort(this.posts, Collections.reverseOrder());
         notifyDataSetChanged();
     }
 

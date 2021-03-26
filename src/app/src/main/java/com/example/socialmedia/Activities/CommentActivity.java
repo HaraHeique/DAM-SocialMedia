@@ -23,6 +23,7 @@ import java.util.ArrayList;
 public class CommentActivity extends BaseActivity {
 
     private CommentViewModel commentViewModel;
+    private RecyclerView commentRecycleList;
     private CommentAdapter commentAdapter;
 
     @Override
@@ -48,7 +49,7 @@ public class CommentActivity extends BaseActivity {
 
     private void setupRecyclerCommentsList() {
         commentAdapter = new CommentAdapter(new ArrayList<>());
-        RecyclerView commentRecycleList = findViewById(R.id.rv_comments);
+        commentRecycleList = findViewById(R.id.rv_comments);
         commentRecycleList.setAdapter(commentAdapter);
         commentRecycleList.setLayoutManager(new LinearLayoutManager(context));
     }
@@ -73,6 +74,7 @@ public class CommentActivity extends BaseActivity {
         commentViewModel.observePostCommentsList().observe(this, objResponse -> {
             if (objResponse.success) {
                 commentAdapter.updateCommentList(objResponse.data);
+                commentRecycleList.smoothScrollToPosition(objResponse.data.size() - 1);
             } else {
                 AlertMessageUtil.defaultAlert(context, objResponse.message);
             }

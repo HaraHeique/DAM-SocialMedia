@@ -11,6 +11,7 @@ import com.example.socialmedia.Adapters.ViewHolders.CommentViewHolder;
 import com.example.socialmedia.Models.Comment;
 import com.example.socialmedia.R;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
@@ -43,6 +44,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
 
     public void updateCommentList(List<Comment> commentsList) {
         this.comments = commentsList;
+        notifyCommentsListChanged();
+    }
+
+    public void notifyCommentsListChanged() {
+        Collections.sort(this.comments);
         notifyDataSetChanged();
     }
 }
