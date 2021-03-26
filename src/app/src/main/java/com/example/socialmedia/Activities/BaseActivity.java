@@ -1,24 +1,22 @@
 package com.example.socialmedia.Activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
@@ -27,9 +25,7 @@ import com.example.socialmedia.Utils.DateTimeUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -42,6 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         context = getApplicationContext();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     protected void setToolbarConfig(int toolbarId, String title, boolean backButton) {
@@ -59,6 +56,19 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void setTitleActionBar(String title) {
         if (actionBar != null) {
             actionBar.setTitle(title);
+        }
+    }
+
+    protected void setColorItemView(View itemView, int colorValue) {
+        if (itemView == null) { return; }
+
+        if (itemView instanceof TextView) {
+            ((TextView) itemView).setTextColor(colorValue);
+        } else if (itemView instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) itemView;
+            for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                setColorItemView(viewGroup.getChildAt(i), colorValue);
+            }
         }
     }
 
