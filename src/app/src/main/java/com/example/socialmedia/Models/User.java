@@ -45,4 +45,23 @@ public class User {
         this.authToken = currentUser.authToken;
         this.appToken = currentUser.appToken;
     }
+
+    public User(String login, String name, Date bornDate, String city, boolean following, String avatar) {
+        this.login = login;
+        this.name = name;
+        this.bornDate = bornDate;
+        this.city = city;
+        this.following = following;
+        this.avatar = avatar;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+
+        User user = (User) o;
+
+        return this.login.equals(user.login);
+    }
 }

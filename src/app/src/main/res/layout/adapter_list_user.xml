@@ -15,9 +15,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="#000000"
         android:contentDescription="@string/cd_avatar_post"
         android:foreground="@drawable/shape_rounded_fg"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -63,7 +65,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="80dp"
         android:layout_marginRight="80dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/tv_friends_city"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imv_user_avatar"
         app:layout_constraintTop_toBottomOf="@+id/tv_user_name_age" />

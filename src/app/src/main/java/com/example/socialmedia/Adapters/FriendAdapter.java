@@ -20,9 +20,9 @@ import java.util.List;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendViewHolder> implements Filterable {
 
-    private final List<User> users;
-    private final List<User> usersCopy;
-    private final List<User> usersAll;
+    private List<User> users;
+    private List<User> usersCopy;
+    private List<User> usersAll;
 
     public FriendAdapter(List<User> usersFriends, List<User> allUsers) {
         this.users = usersFriends;
@@ -84,5 +84,16 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendViewHolder> implem
                 notifyDataSetChanged();
             }
         };
+    }
+
+    public void updateUsersFriendsList(List<User> usersFriends) {
+        this.users = usersFriends;
+        this.usersCopy = new ArrayList<>(this.users);
+        notifyDataSetChanged();
+    }
+
+    public void updateAllUsersList(List<User> allUsers) {
+        this.usersAll = allUsers;
+        notifyDataSetChanged();
     }
 }

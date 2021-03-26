@@ -1,9 +1,11 @@
 package com.example.socialmedia.Activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,9 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialmedia.Adapters.FriendAdapter;
+import com.example.socialmedia.AppConfig;
+import com.example.socialmedia.Models.User;
 import com.example.socialmedia.R;
-import com.example.socialmedia.ViewModels.Factories.FriendViewModelFactory;
+import com.example.socialmedia.Utils.AlertMessageUtil;
 import com.example.socialmedia.ViewModels.FriendViewModel;
+
+import java.util.ArrayList;
 
 public class FriendActivity extends BaseActivity {
 
@@ -26,21 +32,44 @@ public class FriendActivity extends BaseActivity {
         setContentView(R.layout.activity_friend);
 
         setToolbarConfig(R.id.tb_friend, "Amigos", true);
-        setupFriendViewModel();
-        friendAdapter = new FriendAdapter(friendViewModel.getFollowingList(true), friendViewModel.getFriendsList());
+        friendViewModel = new ViewModelProvider(this).get(FriendViewModel.class);
         setupRecyclerFriendList();
+        observeUsersFriendsList();
+        observeAllUsersList();
+        getUsers();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
+    private void setupRecyclerFriendList() {
+        friendAdapter = new FriendAdapter(new ArrayList<>(), new ArrayList<>());
+        RecyclerView postRecycleList = findViewById(R.id.rv_friends);
+        postRecycleList.setAdapter(friendAdapter);
+        postRecycleList.setLayoutManager(new LinearLayoutManager(context));
+    }
 
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_friends, menu);
-        MenuItem searchItem = menu.findItem(R.id.sv_search_friends);
-        onSearchQueryEvent(searchItem);
+    private void observeUsersFriendsList() {
+        friendViewModel.observeFriendsList().observe(this, objResponse -> {
+            if (objResponse.success) {
+                friendAdapter.updateUsersFriendsList(objResponse.data);
+            } else {
+                AlertMessageUtil.defaultAlert(context, objResponse.message);
+            }
+        });
+    }
 
-        return true;
+    private void observeAllUsersList() {
+        friendViewModel.observeAllUsersList().observe(this, objResponse -> {
+            if (objResponse.success) {
+                objResponse.data.remove(new User(AppConfig.getCurrentUser(context)));
+                friendAdapter.updateAllUsersList(objResponse.data);
+            } else {
+                AlertMessageUtil.defaultAlert(context, objResponse.message);
+            }
+        });
+    }
+
+    private void getUsers() {
+        friendViewModel.getFriendsList(new User(AppConfig.getCurrentUser(context)));
+        friendViewModel.getAllUsers();
     }
 
     private void onSearchQueryEvent(MenuItem searchItem) {
@@ -60,14 +89,21 @@ public class FriendActivity extends BaseActivity {
         });
     }
 
-    private void setupFriendViewModel() {
-        FriendViewModelFactory friendViewModelFactory = new FriendViewModelFactory(getResources());
-        friendViewModel = new ViewModelProvider(this, friendViewModelFactory).get(FriendViewModel.class);
-    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
 
-    private void setupRecyclerFriendList() {
-        RecyclerView postRecycleList = findViewById(R.id.rv_friends);
-        postRecycleList.setAdapter(friendAdapter);
-        postRecycleList.setLayoutManager(new LinearLayoutManager(context));
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_friends, menu);
+        MenuItem searchItem = menu.findItem(R.id.sv_search_friends);
+        onSearchQueryEvent(searchItem);
+
+        // Mudança nas cores dos icones do search view
+        setColorItemView(searchItem.getActionView(), Color.WHITE);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        ImageView closeButtonImage = searchView.findViewById(R.id.search_close_btn);
+        closeButtonImage.setImageResource(R.drawable.ic_baseline_close_24);
+
+        return true;
     }
 }
