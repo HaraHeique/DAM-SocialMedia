@@ -174,7 +174,7 @@ public class UserHttpRequest {
             User user = new User(
                 jsonObject.getString("login"),
                 jsonObject.getString("nome"),
-                DateTimeUtil.ConvertToDate(jsonObject.getLong("data_nascimento")),
+                DateTimeUtil.convertToDate(jsonObject.getLong("data_nascimento")),
                 jsonObject.getString("cidade"),
                 true,
                 jsonObject.getString("foto")
@@ -200,7 +200,7 @@ public class UserHttpRequest {
             User user = new User(
                 jsonObject.getString("login"),
                 jsonObject.getString("nome"),
-                DateTimeUtil.ConvertToDateTime(bornDateObject.getString("date"), "yyyy-MM-dd HH:mm:ss.SSSSSS"),
+                DateTimeUtil.convertToDateTime(bornDateObject.getString("date"), "yyyy-MM-dd HH:mm:ss.SSSSSS"),
                 jsonObject.getString("cidade"),
                 jsonObject.getInt("seguindo") == 1,
                 jsonObject.getString("foto")

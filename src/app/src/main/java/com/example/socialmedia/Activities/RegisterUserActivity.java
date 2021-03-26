@@ -56,7 +56,7 @@ public class RegisterUserActivity extends BaseActivity {
                 ((EditText)findViewById(R.id.et_newuser_name)).getText().toString(),
                 ((EditText)findViewById(R.id.et_newuser_login)).getText().toString(),
                 ((EditText)findViewById(R.id.et_newuser_password)).getText().toString(),
-                DateTimeUtil.ConvertToDate(((EditText)findViewById(R.id.et_newuser_borndate)).getText().toString()),
+                DateTimeUtil.convertToDate(((EditText)findViewById(R.id.et_newuser_borndate)).getText().toString()),
                 ((EditText)findViewById(R.id.et_newuser_city)).getText().toString()
             );
 

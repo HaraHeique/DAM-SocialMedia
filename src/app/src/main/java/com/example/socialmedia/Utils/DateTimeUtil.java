@@ -1,6 +1,5 @@
 package com.example.socialmedia.Utils;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,14 +7,18 @@ import java.util.Date;
 
 public final class DateTimeUtil {
 
-    public static final DateFormat defaultDateTimeFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    public static final DateFormat defaultDateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+    public static final String DEFAULT_DATETIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
+    public static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 
-    public static Date ConvertToDateTime(String dateString) {
+    public static Date convertToDateTime(String dateString) {
+        return convertToDateTime(dateString, DEFAULT_DATETIME_FORMAT);
+    }
+
+    public static Date convertToDateTime(String dateString, String formatter) {
         Date date;
 
         try {
-            date = defaultDateTimeFormatter.parse(dateString);
+            date = new SimpleDateFormat(formatter).parse(dateString);
         }
         catch (ParseException e) {
             date = null;
@@ -24,11 +27,15 @@ public final class DateTimeUtil {
         return date;
     }
 
-    public static Date ConvertToDate(String dateString) {
+    public static Date convertToDate(String dateString) {
+        return convertToDate(dateString, DEFAULT_DATE_FORMAT);
+    }
+
+    public static Date convertToDate(String dateString, String formatter) {
         Date date;
 
         try {
-            date = defaultDateFormatter.parse(dateString);
+            date = new SimpleDateFormat(formatter).parse(dateString);
         }
         catch (ParseException e) {
             date = null;
@@ -37,23 +44,27 @@ public final class DateTimeUtil {
         return date;
     }
 
-    public static String ConvertToStrDateTime(Date date) {
-        return defaultDateTimeFormatter.format(date);
+    public static String convertToStrDateTime(Date date) {
+        return convertToStrDateTime(date, DEFAULT_DATETIME_FORMAT);
     }
 
-    public static String ConvertToStrDateTime(Date date, String formatter) {
+    public static String convertToStrDateTime(Date date, String formatter) {
         return new SimpleDateFormat(formatter).format(date);
     }
 
-    public static String ConvertToStrDate(Date date) {
-        return defaultDateFormatter.format(date);
+    public static String convertToStrDate(Date date) {
+        return convertToStrDate(date, DEFAULT_DATE_FORMAT);
+    }
+
+    public static String convertToStrDate(Date date, String formatter) {
+        return new SimpleDateFormat(formatter).format(date);
     }
 
     public static long ConvertToUnixTimeStamp(Date date) {
         return date.getTime() / 1000L;
     }
 
-    public static Date ConvertToDate(long unixTimeStamp) {
+    public static Date convertToDate(long unixTimeStamp) {
         return new Date(unixTimeStamp * 1000L);
     }
 

@@ -32,6 +32,6 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
         this.userAvatarIv.setImageBitmap(ImageUtil.base64ToBitmap(comment.user.avatar));
         this.userNameIv.setText(comment.user.name);
         this.descriptionTv.setText(comment.description);
-        this.dateTv.setText(DateTimeUtil.ConvertToStrDateTime(comment.createDate));
+        this.dateTv.setText(DateTimeUtil.convertToStrDateTime(comment.createDate));
     }
 }

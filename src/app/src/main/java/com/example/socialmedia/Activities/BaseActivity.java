@@ -127,7 +127,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private File createImageFile() throws IOException {
-        String dateTimeNow = DateTimeUtil.ConvertToStrDateTime(new Date(), "dd_MM_yyyy_HH_mm_ss");
+        String dateTimeNow = DateTimeUtil.convertToStrDateTime(new Date(), "dd_MM_yyyy_HH_mm_ss");
         String filename = "JPEG_" + dateTimeNow + "_";
         filename = filename.replace('/', '_');
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);

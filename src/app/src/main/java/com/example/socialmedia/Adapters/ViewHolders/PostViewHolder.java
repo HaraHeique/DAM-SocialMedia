@@ -46,7 +46,7 @@ public abstract class PostViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Post post) {
-        String formatDate = DateTimeUtil.ConvertToStrDateTime(post.createDate);
+        String formatDate = DateTimeUtil.convertToStrDateTime(post.createDate);
         CurrentUser currentUser = AppConfig.getCurrentUser(this.context);
 
         this.descriptionTv.setText(post.description);

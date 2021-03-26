@@ -91,7 +91,7 @@ public class CommentHttpRequest {
             Comment comment = new Comment(
                 jsonObject.getString("idcomentario"),
                 jsonObject.getString("texto"),
-                DateTimeUtil.ConvertToDate(jsonObject.getLong("data_hora")),
+                DateTimeUtil.convertToDate(jsonObject.getLong("data_hora")),
                 user,
                 post
             );

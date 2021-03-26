@@ -95,7 +95,7 @@ public final class PostHttpRequest {
             Post post = new Post(
                 jsonObject.getString("idpost"),
                 jsonObject.getString("texto"),
-                DateTimeUtil.ConvertToDate(jsonObject.getLong("data_hora")),
+                DateTimeUtil.convertToDate(jsonObject.getLong("data_hora")),
                 jsonObject.getString("imagem"),
                 user
             );

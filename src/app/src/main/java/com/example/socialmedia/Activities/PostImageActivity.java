@@ -60,7 +60,7 @@ public class PostImageActivity extends BaseActivity {
 
         postImageIv.setImageBitmap(ImageUtil.base64ToBitmap(postSelected.image));
         descriptionTv.setText(postSelected.description);
-        dateCreatedTv.setText(DateTimeUtil.ConvertToStrDateTime(postSelected.createDate));
+        dateCreatedTv.setText(DateTimeUtil.convertToStrDateTime(postSelected.createDate));
         userNameTv.setText(postSelected.user.name);
         userLoginTv.setText(postSelected.user.login);
         userAvatarTv.setImageBitmap(ImageUtil.base64ToBitmap(postSelected.user.avatar));
