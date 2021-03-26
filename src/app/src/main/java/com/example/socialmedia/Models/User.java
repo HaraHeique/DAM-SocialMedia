@@ -67,6 +67,6 @@ public class User implements Comparable<User> {
 
     @Override
     public int compareTo(User user) {
-        return this.login.compareTo(user.login);
+        return this.login.compareToIgnoreCase(user.login);
     }
 }
