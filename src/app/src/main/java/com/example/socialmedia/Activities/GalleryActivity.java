@@ -9,19 +9,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.socialmedia.Adapters.GalleryAdapter;
 import com.example.socialmedia.AppConfig;
-import com.example.socialmedia.Models.CurrentUser;
-import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
+import com.example.socialmedia.Utils.AlertMessageUtil;
 import com.example.socialmedia.Utils.ImageUtil;
-import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
-import com.example.socialmedia.ViewModels.PostViewModel;
+import com.example.socialmedia.ViewModels.GalleryViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GalleryActivity extends BaseActivity {
 
-    private PostViewModel postViewModel;
+    private GalleryViewModel galleryViewModel;
     private GalleryAdapter galleryAdapter;
 
     @Override
@@ -30,31 +27,22 @@ public class GalleryActivity extends BaseActivity {
         setContentView(R.layout.activity_gallery);
 
         setToolbarConfig(R.id.tb_gallery, "Galeria", true);
-        setupPostViewModel();
-        setupGalleryAdapter();
+        galleryViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
         setupRecyclerGalleryGrid();
+        observePostsImageList();
+        galleryViewModel.getPostsImage(AppConfig.getCurrentUser(context));
     }
 
-    public void startPostImageActivity(int position) {
+    public void startPostImageActivity(String postId) {
         Intent intent = new Intent(context, PostImageActivity.class);
-        intent.putExtra("position", position);
+        intent.putExtra("postId", postId);
         startActivity(intent);
-    }
-
-    private void setupPostViewModel() {
-        CurrentUser currentUser = AppConfig.getCurrentUser(context);
-        PostViewModelFactory postVMFactory = new PostViewModelFactory(currentUser);
-        postViewModel = new ViewModelProvider(this, postVMFactory).get(PostViewModel.class);
-    }
-
-    private void setupGalleryAdapter() {
-        CurrentUser currentUser = AppConfig.getCurrentUser(context);
-        List<Post> currentUserPosts = new ArrayList<>();//postViewModel.getImagePostsByLogin(currentUser.login);
-        galleryAdapter = new GalleryAdapter(currentUserPosts);
     }
 
     private void setupRecyclerGalleryGrid() {
         RecyclerView galleryRecycleGrid = findViewById(R.id.rv_gallery);
+
+        galleryAdapter = new GalleryAdapter(new ArrayList<>());
         galleryRecycleGrid.setAdapter(galleryAdapter);
 
         // Definindo os espaçamento entre os itens do grid antes de definir o layout manager
@@ -62,5 +50,15 @@ public class GalleryActivity extends BaseActivity {
         int numberOfColumns = ImageUtil.calculateNumberOfColumns(context, width);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, numberOfColumns);
         galleryRecycleGrid.setLayoutManager(gridLayoutManager);
+    }
+
+    private void observePostsImageList() {
+        galleryViewModel.observePostsImageList().observe(this, objResponse -> {
+            if (objResponse.success) {
+                galleryAdapter.updateGalleryList(objResponse.data);
+            } else {
+                AlertMessageUtil.defaultAlert(context, objResponse.message);
+            }
+        });
     }
 }

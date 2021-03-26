@@ -17,7 +17,7 @@ import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
 
-    private final List<Post> posts;
+    private List<Post> posts;
 
     public GalleryAdapter(List<Post> posts) {
         this.posts = posts;
@@ -36,7 +36,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         Post post = this.posts.get(position);
         holder.bind(post);
-        this.onClickPostImage(holder.itemView, position);
+        this.onClickPostImage(holder.itemView, post.id);
     }
 
     @Override
@@ -44,8 +44,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
         return this.posts.size();
     }
 
-    private void onClickPostImage(View itemView, int position) {
+    public void updateGalleryList(List<Post> posts) {
+        this.posts = posts;
+        notifyDataSetChanged();
+    }
+
+    private void onClickPostImage(View itemView, String postId) {
         ImageView imageView = itemView.findViewById(R.id.imv_gallery);
-        imageView.setOnClickListener(v -> ((GalleryActivity)v.getContext()).startPostImageActivity(position));
+        GalleryActivity galleryActivity = (GalleryActivity) itemView.getContext();
+        imageView.setOnClickListener(v -> galleryActivity.startPostImageActivity(postId));
     }
 }

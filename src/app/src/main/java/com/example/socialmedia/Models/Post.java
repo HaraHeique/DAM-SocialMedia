@@ -19,6 +19,11 @@ public class Post implements Comparable<Post> {
         this.id = id;
     }
 
+    public Post(String id, String image) {
+        this.id = id;
+        this.image = image;
+    }
+
     public Post(String description, User user) {
         this.description = description;
         this.user = user;

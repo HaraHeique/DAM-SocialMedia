@@ -50,6 +50,29 @@ public final class PostHttpRequest {
         return objResponse;
     }
 
+    public ObjectResponse<List<Post>> getPostsImage(CurrentUser currentUser) {
+        String requestUrl = AppConfig.BASE_URL + "pegar_galeria.php";
+
+        HttpRequest httpRequest = new HttpRequest(requestUrl, "POST", "UTF-8");
+        httpRequest.addParam("login", currentUser.login);
+        httpRequest.addParam("auth_token", currentUser.authToken);
+
+        ObjectResponse<List<Post>> objResponse;
+
+        try {
+            InputStream inputStream = httpRequest.execute();
+            String response = httpRequest.getResponseString(inputStream, "UTF-8");
+            httpRequest.finish();
+
+            objResponse = httpRequest.getCommonObject(response);
+            objResponse.setData(getPostsImage(objResponse));
+        } catch (IOException | JSONException e) {
+            objResponse = new ObjectResponse<>(e);
+        }
+
+        return objResponse;
+    }
+
     public ObjectResponse<Post> createPost(Post post, File image) {
         String requestUrl = AppConfig.BASE_URL + "post.php";
 
@@ -98,6 +121,27 @@ public final class PostHttpRequest {
                 DateTimeUtil.convertToDate(jsonObject.getLong("data_hora")),
                 jsonObject.getString("imagem"),
                 user
+            );
+
+            posts.add(post);
+        }
+
+        return posts;
+    }
+
+    private List<Post> getPostsImage(ObjectResponse<List<Post>> objResponse) throws JSONException {
+        List<Post> posts = new ArrayList<>();
+
+        if (!objResponse.success) { return posts; }
+
+        JSONArray jsonArray = objResponse.jsonObject.getJSONArray("fotos");
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+            Post post = new Post(
+                jsonObject.getString("idpost"),
+                jsonObject.getString("imagem")
             );
 
             posts.add(post);
