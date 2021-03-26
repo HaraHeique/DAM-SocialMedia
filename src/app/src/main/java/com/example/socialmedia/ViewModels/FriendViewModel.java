@@ -14,12 +14,16 @@ import java.util.concurrent.Executors;
 
 public class FriendViewModel extends ViewModel {
 
+    public boolean pressFollowButton;
+
     private final MutableLiveData<ObjectResponse<List<User>>> friendsList;
     private final MutableLiveData<ObjectResponse<List<User>>> allUsersList;
+    private final MutableLiveData<ObjectResponse<User>> userFollowState;
 
     public FriendViewModel() {
         this.friendsList = new MutableLiveData<>();
         this.allUsersList = new MutableLiveData<>();
+        this.userFollowState = new MutableLiveData<>();
     }
 
     // Observer (LiveData)
@@ -29,6 +33,10 @@ public class FriendViewModel extends ViewModel {
 
     public LiveData<ObjectResponse<List<User>>> observeFriendsList() {
         return this.friendsList;
+    }
+
+    public LiveData<ObjectResponse<User>> observeFollowState() {
+        return this.userFollowState;
     }
 
     // Requests
@@ -47,6 +55,23 @@ public class FriendViewModel extends ViewModel {
             UserHttpRequest userRequest = UserHttpRequest.getInstance();
             ObjectResponse<List<User>> objResponse = userRequest.getUsersFollowing(user);
             this.friendsList.postValue(objResponse);
+        });
+    }
+
+    public void changeFollowState(User user, String who, boolean following) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
+            UserHttpRequest userRequest = UserHttpRequest.getInstance();
+            ObjectResponse<User> objResponse;
+
+            if (following) {
+                objResponse = userRequest.follow(user, who);
+            } else {
+                objResponse = userRequest.unfollow(user, who);
+            }
+
+            this.pressFollowButton = following;
+            this.userFollowState.postValue(objResponse);
         });
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
@@ -36,7 +35,13 @@ public class FriendActivity extends BaseActivity {
         setupRecyclerFriendList();
         observeUsersFriendsList();
         observeAllUsersList();
+        observeUserFollowState();
         getUsers();
+    }
+
+    public void changeStateFollow(String who, boolean following) {
+        User user = new User(AppConfig.getCurrentUser(context));
+        friendViewModel.changeFollowState(user, who, following);
     }
 
     private void setupRecyclerFriendList() {
@@ -61,6 +66,18 @@ public class FriendActivity extends BaseActivity {
             if (objResponse.success) {
                 objResponse.data.remove(new User(AppConfig.getCurrentUser(context)));
                 friendAdapter.updateAllUsersList(objResponse.data);
+            } else {
+                AlertMessageUtil.defaultAlert(context, objResponse.message);
+            }
+        });
+    }
+
+    private void observeUserFollowState() {
+        friendViewModel.observeFollowState().observe(this, objResponse -> {
+            if (objResponse.success) {
+                getUsers();
+                String message = friendViewModel.pressFollowButton ? "Usuário seguido." : "Usuário deixado de seguir.";
+                AlertMessageUtil.defaultAlert(context, message);
             } else {
                 AlertMessageUtil.defaultAlert(context, objResponse.message);
             }

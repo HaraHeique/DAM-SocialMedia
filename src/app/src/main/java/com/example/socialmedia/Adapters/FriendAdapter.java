@@ -6,16 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.socialmedia.Activities.FriendActivity;
 import com.example.socialmedia.Adapters.ViewHolders.FriendViewHolder;
 import com.example.socialmedia.Models.User;
 import com.example.socialmedia.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendViewHolder> implements Filterable {
@@ -44,6 +47,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendViewHolder> implem
     public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
         User user = this.users.get(position);
         holder.bind(user);
+        this.onClickBtnIconFollow(holder.itemView, user.login);
     }
 
     @Override
@@ -91,12 +95,23 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendViewHolder> implem
 
     public void updateUsersFriendsList(List<User> usersFriends) {
         this.users = usersFriends;
+        notifyUsersListChanged(this.users);
         this.usersCopy = new ArrayList<>(this.users);
-        notifyDataSetChanged();
     }
 
     public void updateAllUsersList(List<User> allUsers) {
         this.usersAll = allUsers;
+        notifyUsersListChanged(allUsers);
+    }
+
+    public void notifyUsersListChanged(List<User> users) {
+        Collections.sort(users);
         notifyDataSetChanged();
+    }
+
+    private void onClickBtnIconFollow(View itemView, String who) {
+        ImageView btnFollow = itemView.findViewById(R.id.imv_user_follow);
+        boolean following = (Boolean)btnFollow.getTag();
+        btnFollow.setOnClickListener(v -> ((FriendActivity)v.getContext()).changeStateFollow(who, following));
     }
 }

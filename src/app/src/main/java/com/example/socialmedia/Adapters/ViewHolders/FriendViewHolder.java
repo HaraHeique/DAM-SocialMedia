@@ -15,7 +15,6 @@ import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class FriendViewHolder extends RecyclerView.ViewHolder {
 
@@ -41,17 +40,19 @@ public class FriendViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(User user) {
         this.userAvatarIv.setImageBitmap(ImageUtil.base64ToBitmap(user.avatar));
-        this.userFollowIv.setImageDrawable(this.getFollowingIcon(user.following));
+        this.userFollowIv.setImageDrawable(this.getFollowingIcon(this.userFollowIv, user.following));
         this.userLoginTv.setText(user.login);
         this.userNameAgeTv.setText(this.getNameAgeFormattedText(user));
         this.userCityTv.setText(user.city);
     }
 
-    private Drawable getFollowingIcon(boolean following) {
+    private Drawable getFollowingIcon(View itemView, boolean following) {
         if (!following) {
+            itemView.setTag(true);
             return ImageUtil.getDrawable(this.resources, R.drawable.ic_baseline_person_add_24);
         }
 
+        itemView.setTag(false);
         return ImageUtil.getDrawable(this.resources, R.drawable.ic_baseline_person_add_disabled_24);
     }
 
