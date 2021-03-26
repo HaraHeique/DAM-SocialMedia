@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "998288060137",
+    "firebase_url": "https://social-15b6a.firebaseio.com",
+    "project_id": "social-15b6a",
+    "storage_bucket": "social-15b6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998288060137:android:4d7edb56ded2f5e5108a78",
+        "android_client_info": {
+          "package_name": "com.example.a20171tiimi0041.instapobre"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998288060137-ds1js92o2tk035iscg88lg64nkll9g0a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuonClptGx_1O8FcY4aNARgmFWKQLsDtY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998288060137-ds1js92o2tk035iscg88lg64nkll9g0a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998288060137:android:e4986633579eef7b108a78",
+        "android_client_info": {
+          "package_name": "com.example.socialmedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998288060137-ds1js92o2tk035iscg88lg64nkll9g0a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuonClptGx_1O8FcY4aNARgmFWKQLsDtY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998288060137-ds1js92o2tk035iscg88lg64nkll9g0a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

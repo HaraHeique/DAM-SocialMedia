@@ -16,6 +16,12 @@ public final class AppConfig {
                !mPrefs.getString("authToken", "").isEmpty();
     }
 
+    public static String getAppToken(Context context) {
+        SharedPreferences mPrefs = context.getSharedPreferences("configs", 0);
+
+        return mPrefs.getString("appToken", "");
+    }
+
     public static CurrentUser getCurrentUser(Context context) {
         SharedPreferences mPrefs = context.getSharedPreferences("configs", 0);
 
@@ -37,13 +43,18 @@ public final class AppConfig {
         if (!value) { mEditor.clear(); }
     }
 
+    public static void setAppToken(Context context, String appToken) {
+        SharedPreferences mPrefs = context.getSharedPreferences("configs", 0);
+        SharedPreferences.Editor mEditor = mPrefs.edit();
+        mEditor.putString("appToken", appToken).apply();
+    }
+
     public static void setCurrentUser(Context context, CurrentUser currentUser) {
         SharedPreferences mPrefs = context.getSharedPreferences("configs", 0);
         SharedPreferences.Editor mEditor = mPrefs.edit();
 
         mEditor.putString("login", currentUser.login);
         mEditor.putString("authToken", currentUser.authToken);
-        mEditor.putString("appToken", currentUser.appToken);
         mEditor.apply();
     }
 }
