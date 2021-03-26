@@ -26,6 +26,28 @@ public final class PostHttpRequest {
         return instance;
     }
 
+    public ObjectResponse<Post> getPost(String postId) {
+        String requestUrl = AppConfig.BASE_URL + "pegar_post.php";
+
+        HttpRequest httpRequest = new HttpRequest(requestUrl, "GET", "UTF-8");
+        httpRequest.addParam("idpost", postId);
+
+        ObjectResponse<Post> objResponse;
+
+        try {
+            InputStream inputStream = httpRequest.execute();
+            String response = httpRequest.getResponseString(inputStream, "UTF-8");
+            httpRequest.finish();
+
+            objResponse = httpRequest.getCommonObject(response);
+            objResponse.setData(getPost(objResponse));
+        } catch (IOException | JSONException e) {
+            objResponse = new ObjectResponse<>(e);
+        }
+
+        return objResponse;
+    }
+
     public ObjectResponse<List<Post>> getPosts(CurrentUser currentUser, TimelineType type) {
         String requestUrl = AppConfig.BASE_URL + "pegar_posts.php";
 
@@ -96,6 +118,33 @@ public final class PostHttpRequest {
         }
 
         return objResponse;
+    }
+
+    private Post getPost(ObjectResponse<Post> objResponse) throws JSONException {
+        if (!objResponse.success) { return null; }
+
+        JSONArray jsonArray = objResponse.jsonObject.getJSONArray("post");
+
+        if (jsonArray.length() == 0) { return null; }
+
+        JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+        User user = new User(
+            jsonObject.getString("nome"),
+            "",
+            jsonObject.getInt("seguindo") == 1,
+            jsonObject.getString("foto_usuario")
+        );
+
+        Post post = new Post(
+            jsonObject.getString("idpost"),
+            jsonObject.getString("texto"),
+            DateTimeUtil.convertToDate(jsonObject.getLong("data_hora")),
+            jsonObject.getString("imagem"),
+            user
+        );
+
+        return post;
     }
 
     private List<Post> getPosts(ObjectResponse<List<Post>> objResponse) throws JSONException {

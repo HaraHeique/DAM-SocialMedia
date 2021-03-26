@@ -12,41 +12,54 @@ import com.example.socialmedia.AppConfig;
 import com.example.socialmedia.Models.CurrentUser;
 import com.example.socialmedia.Models.Post;
 import com.example.socialmedia.R;
+import com.example.socialmedia.Utils.AlertMessageUtil;
 import com.example.socialmedia.Utils.DateTimeUtil;
 import com.example.socialmedia.Utils.ImageUtil;
-import com.example.socialmedia.ViewModels.Factories.PostViewModelFactory;
-import com.example.socialmedia.ViewModels.PostViewModel;
+import com.example.socialmedia.ViewModels.PostImageViewModel;
 
 public class PostImageActivity extends BaseActivity {
 
-    private PostViewModel postViewModel;
-    private CurrentUser currentUser;
+    private PostImageViewModel postImageViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_image);
 
-        currentUser = AppConfig.getCurrentUser(context);
-        setupPostViewModel();
-        Post postSelected = getPostSelected();
         setToolbarConfig(R.id.tb_post_image, "Detalhes do Post", true);
-        bindInfoPostImage(postSelected);
-        onClickIconComment(postSelected);
+        setupPostImageViewModel();
+        onClickIconComment();
+        observePostsImageList();
+        postImageViewModel.getPost(postImageViewModel.postId);
     }
 
-    private void setupPostViewModel() {
-        CurrentUser currentUser = AppConfig.getCurrentUser(context);
-        PostViewModelFactory postVMFactory = new PostViewModelFactory(currentUser);
-        postViewModel = new ViewModelProvider(this, postVMFactory).get(PostViewModel.class);
-    }
+    private void setupPostImageViewModel() {
+        postImageViewModel = new ViewModelProvider(this).get(PostImageViewModel.class);
 
-    private Post getPostSelected() {
         Intent intent = getIntent();
-        int position = intent.getIntExtra("position", 0);
+        postImageViewModel.postId = intent.getStringExtra("postId");
+    }
 
-        //return postViewModel.getImagePostsByLogin(currentUser.login).get(position);
-        return null;
+    private void onClickIconComment() {
+        ImageView commentIv = findViewById(R.id.imv_timeline_comment);
+
+        commentIv.setOnClickListener(v -> {
+            Intent intent = new Intent(context, CommentActivity.class);
+            intent.putExtra("postId", postImageViewModel.postId);
+            startActivity(intent);
+        });
+    }
+
+    private void observePostsImageList() {
+        postImageViewModel.observePostImage().observe(this, objResponse -> {
+            if (objResponse.success) {
+                CurrentUser currentUser = AppConfig.getCurrentUser(context);
+                objResponse.data.user.login = currentUser.login;
+                bindInfoPostImage(objResponse.data);
+            } else {
+                AlertMessageUtil.defaultAlert(context, objResponse.message);
+            }
+        });
     }
 
     private void bindInfoPostImage(Post postSelected) {
@@ -64,15 +77,8 @@ public class PostImageActivity extends BaseActivity {
         userNameTv.setText(postSelected.user.name);
         userLoginTv.setText(postSelected.user.login);
         userAvatarTv.setImageBitmap(ImageUtil.base64ToBitmap(postSelected.user.avatar));
+
+        // Todos os posts são do usuário corrente, logo não precisa de mostrar o ícone de follow
         followingIv.setVisibility(View.GONE);
-    }
-
-    private void onClickIconComment(Post postSelected) {
-        ImageView commentIv = findViewById(R.id.imv_timeline_comment);
-
-        commentIv.setOnClickListener(v -> {
-            Intent intent = new Intent(context, CommentActivity.class);
-            startActivity(intent);
-        });
     }
 }

@@ -20,12 +20,11 @@ import java.io.OutputStream;
 
 public final class ImageUtil {
 
-    public static int calculateNumberOfColumns(Context context, float columnWidthDp) { // For example columnWidthdp=180
+    public static int calculateNumberOfColumns(Context context, float columnWidthDp) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float screenWidthDp = displayMetrics.widthPixels;
-        int numberOfColumns = (int) (screenWidthDp / columnWidthDp + 0.5); // +0.5 for correct rounding to int.
 
-        return numberOfColumns;
+        return (int) (screenWidthDp / columnWidthDp + 0.5);
     }
 
     public static Bitmap getBitmap(String imagePath, int w, int h) {
