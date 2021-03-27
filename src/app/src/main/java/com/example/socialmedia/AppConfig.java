@@ -16,6 +16,17 @@ public final class AppConfig {
                !mPrefs.getString("authToken", "").isEmpty();
     }
 
+    public static int nextNotificationId(Context context) {
+        SharedPreferences mPrefs = context.getSharedPreferences("configs", 0);
+        int id = mPrefs.getInt("lastNotificationId", 0);
+
+        if (id + 1 == Integer.MAX_VALUE) { id = 0; }
+
+        mPrefs.edit().putInt("lastNotificationId", id + 1).apply();
+
+        return id;
+    }
+
     public static String getAppToken(Context context) {
         SharedPreferences mPrefs = context.getSharedPreferences("configs", 0);
 
@@ -40,7 +51,12 @@ public final class AppConfig {
         SharedPreferences.Editor mEditor = mPrefs.edit();
         mEditor.putBoolean("isLogged", value).apply();
 
-        if (!value) { mEditor.clear(); }
+        // Caso seja logout exclui todas info com exceção do AppToken
+        if (!value) {
+            String appToken = getAppToken(context);
+            mEditor.clear();
+            setAppToken(context, appToken);
+        }
     }
 
     public static void setAppToken(Context context, String appToken) {

@@ -50,13 +50,13 @@ public class UserHttpRequest {
         return objResponse;
     }
 
-    public ObjectResponse<User> login(String login, String password) {
+    public ObjectResponse<User> login(String login, String password, String appToken) {
         String requestUrl = AppConfig.BASE_URL + "login.php";
 
         HttpRequest httpRequest = new HttpRequest(requestUrl, "POST", "UTF-8");
         httpRequest.addParam("login", login);
         httpRequest.addParam("senha", password);
-        httpRequest.addParam("app_token", "");
+        httpRequest.addParam("app_token", appToken);
 
         ObjectResponse<User> objResponse;
 

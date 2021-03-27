@@ -69,10 +69,11 @@ public class LoginActivity extends BaseActivity {
         btnLogin.setOnClickListener(v -> {
             String login = ((EditText)findViewById(R.id.et_login)).getText().toString();
             String password = ((EditText)findViewById(R.id.et_password)).getText().toString();
+            String appToken = AppConfig.getAppToken(context);
 
             if (!validateUserLogin(login, password)) { return; }
 
-            loginViewModel.login(login, password);
+            loginViewModel.login(login, password, appToken);
         });
     }
 

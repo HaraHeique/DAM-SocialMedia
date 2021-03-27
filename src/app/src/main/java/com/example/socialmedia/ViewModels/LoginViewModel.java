@@ -25,11 +25,11 @@ public class LoginViewModel extends ViewModel {
     }
 
     // Requests
-    public void login(String login, String password) {
+    public void login(String login, String password, String appToken) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             UserHttpRequest userRequest = UserHttpRequest.getInstance();
-            ObjectResponse<User> objResponse = userRequest.login(login, password);
+            ObjectResponse<User> objResponse = userRequest.login(login, password, appToken);
             this.userLogin.postValue(objResponse);
         });
     }
