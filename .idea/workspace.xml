@@ -10,7 +10,9 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d28c1c26-0390-4c5d-8ea5-ee731a861749" name="Default Changelist" comment="" />
+    <list default="true" id="d28c1c26-0390-4c5d-8ea5-ee731a861749" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/app/src/main/java/com/example/socialmedia/Services/CloudMessageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/src/main/java/com/example/socialmedia/Services/CloudMessageService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,7 +38,7 @@
     <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-02-23T23:42:45.385Z" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
@@ -119,10 +121,11 @@
     </state>
     <state x="-1828" y="92" width="1736" height="856" key="AVDManager/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1614117937952" />
     <state x="92" y="92" width="1736" height="856" key="AVDManager/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1614227002505" />
-    <state x="740" y="246" key="FileChooserDialogImpl" timestamp="1614303822599">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="526" y="202" width="424" height="484" key="FileChooserDialogImpl" timestamp="1616864987819">
+      <screen x="0" y="27" width="1366" height="741" />
     </state>
     <state x="740" y="246" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1614303822599" />
+    <state x="526" y="202" width="424" height="484" key="FileChooserDialogImpl/0.27.1366.741/1366.0.1920.1080@0.27.1366.741" timestamp="1616864987819" />
     <state width="1877" height="281" key="GridCell.Tab.0.bottom" timestamp="1614791886035">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
